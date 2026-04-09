@@ -127,3 +127,33 @@ gsap.from('.abstract-shape', {
     duration: 1.5,
     ease: 'elastic.out(1, 0.5)'
 });
+
+// Mobile Menu Toggle
+const menuToggle = document.querySelector('.menu-toggle');
+const mobileMenu = document.querySelector('.mobile-menu');
+const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+        
+        // Prevent scrolling when menu is open
+        if (mobileMenu.classList.contains('active')) {
+            lenis.stop();
+            document.body.style.overflow = 'hidden';
+        } else {
+            lenis.start();
+            document.body.style.overflow = '';
+        }
+    });
+
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            menuToggle.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            lenis.start();
+            document.body.style.overflow = '';
+        });
+    });
+}
