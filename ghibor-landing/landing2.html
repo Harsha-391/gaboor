@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHABOOR | Streetwear Redefined</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brown: #b47446;
+            --brown-light: #c8895a;
+            --sage: #bcc6bb;
+            --bg: #0e0c0d;
+            --bg2: #181416;
+            --white: #f5f0eb;
+            --grey: #2a2628;
+            --font-brand: 'UnifrakturMaguntia', cursive;
+            --font: 'Inter', sans-serif;
+            --ease: cubic-bezier(0.77,0,0.175,1);
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: var(--font);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        a { color: inherit; text-decoration: none; cursor: none; }
+        ul { list-style: none; }
+
+        /* ── CURSOR ── */
+        #cursor {
+            position: fixed; top:0; left:0;
+            width: 14px; height: 14px;
+            background: var(--white);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transform: translate(-50%,-50%);
+            transition: transform 0.1s, width 0.3s, height 0.3s;
+        }
+        #cursor.big { width:56px; height:56px; background:transparent; border:1.5px solid var(--white); }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top:0; left:0; width:100%;
+            padding: 1.8rem 4rem;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 500;
+            mix-blend-mode: difference;
+        }
+        .nav-links { display:flex; gap:2.5rem; }
+        .nav-link {
+            font-size:.78rem; font-weight:700; letter-spacing:.12em;
+            position:relative; overflow:hidden; display:block; line-height:1.2;
+        }
+        .nav-link span { display:block; transition: transform .35s var(--ease); }
+        .nav-link span:last-child { position:absolute; top:100%; left:0; }
+        .nav-link:hover span:first-child { transform: translateY(-100%); }
+        .nav-link:hover span:last-child  { transform: translateY(-100%); }
+        .nav-logo {
+            font-family: var(--font-brand);
+            font-size: 2.6rem;
+            letter-spacing: 2px;
+            color: var(--white);
+        }
+        .nav-right { display:flex; gap:2.5rem; align-items:center; }
+        .nav-cart {
+            font-size:.78rem; font-weight:700; letter-spacing:.12em;
+            border:1px solid var(--white);
+            padding:.5rem 1.2rem;
+            border-radius:2rem;
+            transition: background .3s, color .3s;
+        }
+        .nav-cart:hover { background:var(--white); color:var(--bg); }
+
+        /* ── HERO ── */
+        .hero {
+            height: 100vh; width:100%;
+            display: flex; flex-direction: column;
+            position: relative; overflow: hidden;
+        }
+
+        /* Grain overlay */
+        .hero::before {
+            content:'';
+            position:absolute; inset:0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-size:200px;
+            z-index:1; pointer-events:none; opacity:.6;
+        }
+
+        .hero-bg-text {
+            position:absolute; bottom:-4vw; left:-1vw;
+            font-size: 28vw; font-weight:900; letter-spacing:-.05em;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(180,116,70,.15);
+            line-height:1; pointer-events:none; z-index:0;
+            white-space: nowrap;
+        }
+
+        /* Hero top line */
+        .hero-topbar {
+            position:relative; z-index:2;
+            padding: 10rem 4rem 0;
+        }
+        .hero-tag {
+            font-size:.72rem; letter-spacing:.2em; font-weight:600;
+            color: var(--brown); opacity:.8;
+        }
+
+        /* Big title */
+        .hero-titles {
+            position: absolute;
+            top: 50%; left: 4rem;
+            transform: translateY(-60%);
+            z-index: 3;
+        }
+        .hero-t1 {
+            font-size: clamp(5rem,10vw,11rem);
+            font-weight:900; line-height:.85;
+            letter-spacing:-.03em;
+        }
+        .hero-t2 {
+            font-size: clamp(5rem,10vw,11rem);
+            font-weight:900; line-height:.85;
+            letter-spacing:-.03em;
+            color:transparent;
+            -webkit-text-stroke:1.5px var(--white);
+            padding-left: 8vw;
+        }
+
+        /* ── SKETCH ANIMATION STAGE ── */
+        .sketch-stage {
+            position: absolute;
+            right: 4vw; top:50%;
+            transform: translateY(-50%);
+            width: 420px; height: 580px;
+            z-index: 4;
+        }
+
+        #sketchCanvas {
+            width:100%; height:100%;
+        }
+
+        /* ── MARQUEE ── */
+        .marquee-wrap {
+            background: var(--brown);
+            padding: 1.4rem 0;
+            overflow:hidden; white-space:nowrap;
+            position:relative; z-index:10;
+        }
+        .marquee-track {
+            display:inline-block;
+            animation: marquee 22s linear infinite;
+        }
+        .marquee-track span {
+            font-size:1.1rem; font-weight:800;
+            letter-spacing:.12em;
+            color: var(--bg);
+            padding: 0 2rem;
+        }
+        @keyframes marquee {
+            0%  { transform:translateX(0); }
+            100%{ transform:translateX(-33.33%); }
+        }
+
+        /* ── PRODUCTS ── */
+        .products {
+            padding: 8rem 4rem;
+            background: var(--bg);
+        }
+        .sec-head {
+            display:flex; justify-content:space-between; align-items:flex-end;
+            margin-bottom: 4rem;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            padding-bottom: 2rem;
+        }
+        .sec-title {
+            font-size: clamp(2rem,4vw,3.5rem);
+            font-weight:900; letter-spacing:-.02em;
+        }
+        .sec-sub {
+            font-size:.78rem; letter-spacing:.15em; font-weight:600;
+            color: var(--brown); text-transform:uppercase;
+        }
+        .grid {
+            display:grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 2rem;
+        }
+        .card {
+            cursor:none; position:relative;
+        }
+        .card-img {
+            aspect-ratio:4/5; overflow:hidden;
+            position:relative; margin-bottom:1.2rem;
+        }
+        .card-bg {
+            position:absolute; inset:0;
+            transition: transform .8s var(--ease);
+        }
+        .card img {
+            width:100%; height:100%; object-fit:cover;
+            position:relative; z-index:2;
+            transition: transform .8s var(--ease);
+        }
+        .card:hover img { transform:scale(1.06); }
+        .card-buy {
+            position:absolute; bottom:1.5rem; left:50%;
+            transform: translateX(-50%) translateY(16px);
+            background:var(--white); color:var(--bg);
+            padding:.6rem 2rem; border-radius:2rem;
+            font-weight:800; font-size:.78rem; letter-spacing:.1em;
+            opacity:0; transition:.35s var(--ease); z-index:3;
+            white-space:nowrap;
+        }
+        .card:hover .card-buy { opacity:1; transform:translateX(-50%) translateY(0); }
+        .card-name { font-size:.88rem; font-weight:700; letter-spacing:.06em; }
+        .card-price { font-family:var(--font-brand); font-size:1.2rem; color:var(--sage); }
+        .card-meta { display:flex; justify-content:space-between; align-items:center; }
+        .card-clr { font-size:.72rem; color:rgba(255,255,255,.4); letter-spacing:.08em; margin-top:.3rem; }
+
+        /* ── BRAND STORY / ABOUT ── */
+        .about {
+            background: var(--bg2);
+            padding: 8rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+        .about-left { position:relative; }
+        .about-badge {
+            width: 380px; height: 380px;
+            border-radius:50%;
+            background: radial-gradient(circle at 40% 40%, #2a201a 0%, var(--bg) 70%);
+            border: 1px solid rgba(180,116,70,.2);
+            display:flex; align-items:center; justify-content:center;
+            position:relative;
+        }
+        .about-badge::before {
+            content:'';
+            position:absolute; inset:-1px;
+            border-radius:50%;
+            background: conic-gradient(from 0deg, transparent 0%, var(--brown) 30%, transparent 60%);
+            animation: spin 8s linear infinite;
+            z-index:0;
+            mask: radial-gradient(circle, transparent 96%, black 97%);
+            -webkit-mask: radial-gradient(circle, transparent 96%, black 97%);
+        }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .about-logo-big {
+            font-family: var(--font-brand);
+            font-size: 5.5rem;
+            background: linear-gradient(160deg,#fff 0%,var(--brown) 40%,#888 60%,#fff 80%);
+            -webkit-background-clip:text; background-clip:text;
+            color:transparent;
+            filter:drop-shadow(0 8px 20px rgba(0,0,0,.7));
+            position:relative; z-index:1;
+            animation: shimmer 5s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%,100%{filter:drop-shadow(0 8px 20px rgba(0,0,0,.7)) brightness(1);}
+            50%{filter:drop-shadow(0 8px 30px rgba(180,116,70,.5)) brightness(1.3);}
+        }
+        .about-pills {
+            display:flex; gap:.75rem; flex-wrap:wrap;
+            margin-top:2rem;
+        }
+        .pill {
+            border:1px solid rgba(255,255,255,.15);
+            padding:.5rem 1.2rem;
+            border-radius:2rem;
+            font-size:.72rem; font-weight:600; letter-spacing:.1em;
+            color:rgba(255,255,255,.6);
+        }
+        .about-right h2 {
+            font-size:clamp(2.5rem,4vw,4rem);
+            font-weight:900; line-height:1;
+            letter-spacing:-.02em; margin-bottom:2rem;
+        }
+        .about-right h2 em { color:var(--brown); font-style:normal; }
+        .about-right p {
+            font-size:1.05rem; line-height:1.7;
+            color:rgba(255,255,255,.65);
+            margin-bottom:1.5rem; max-width:480px;
+        }
+        .about-cta {
+            display:inline-flex; align-items:center; gap:1rem;
+            margin-top:2rem;
+            border-bottom:1px solid var(--brown);
+            padding-bottom:.4rem;
+            font-weight:700; letter-spacing:.1em; font-size:.85rem;
+            color:var(--brown); transition:gap .3s;
+        }
+        .about-cta:hover { gap:1.8rem; }
+
+        /* ── FOOTER ── */
+        footer {
+            background:var(--bg);
+            border-top:1px solid rgba(255,255,255,.06);
+            padding: 5rem 4rem 2rem;
+        }
+        .foot-top {
+            display:flex; justify-content:space-between; align-items:flex-start;
+            margin-bottom:4rem; gap:4rem;
+        }
+        .foot-logo {
+            font-family:var(--font-brand); font-size:5rem; line-height:.9;
+        }
+        .foot-links-grid {
+            display:grid; grid-template-columns:repeat(3,1fr); gap:3rem;
+        }
+        .foot-col h4 {
+            font-size:.72rem; letter-spacing:.15em; color:var(--brown);
+            margin-bottom:1.2rem;
+        }
+        .foot-col ul { display:flex; flex-direction:column; gap:.6rem; }
+        .foot-col ul a { font-size:.85rem; color:rgba(255,255,255,.45); transition:color .3s; }
+        .foot-col ul a:hover { color:var(--white); }
+        .newsletter-inp {
+            display:flex;
+            border-bottom:1px solid rgba(255,255,255,.2);
+            padding-bottom:.5rem; margin-top:.5rem;
+        }
+        .newsletter-inp input {
+            background:none; border:none; color:var(--white);
+            font-family:var(--font); font-size:.85rem; flex:1; outline:none;
+        }
+        .newsletter-inp button {
+            background:none; border:none; color:var(--brown);
+            font-size:1.2rem; cursor:none; font-weight:700;
+        }
+        .foot-bottom {
+            display:flex; justify-content:space-between; align-items:center;
+            border-top:1px solid rgba(255,255,255,.06);
+            padding-top:1.5rem;
+            font-size:.7rem; color:rgba(255,255,255,.3); letter-spacing:.08em;
+        }
+        .socials { display:flex; gap:1.5rem; }
+        .socials a { transition:color .3s; }
+        .socials a:hover { color:var(--white); }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:1100px){
+            .sketch-stage { width:320px; height:460px; }
+            .hero-titles { left:3rem; }
+        }
+        @media(max-width:900px){
+            nav { padding:1.5rem 2rem; }
+            .nav-links { display:none; }
+            .hero-titles { left:2rem; }
+            .sketch-stage { width:260px; height:380px; right:2vw; }
+            .products,.about { padding:5rem 2rem; }
+            .grid { grid-template-columns:1fr 1fr; }
+            .about { grid-template-columns:1fr; gap:3rem; }
+            .about-badge { width:260px; height:260px; }
+            .about-logo-big { font-size:3.5rem; }
+            footer { padding:4rem 2rem 2rem; }
+            .foot-top { flex-direction:column; }
+            .foot-links-grid { grid-template-columns:1fr 1fr; }
+        }
+        @media(max-width:600px){
+            .grid { grid-template-columns:1fr; }
+            .hero-t1,.hero-t2 { font-size:clamp(3.5rem,14vw,5rem); }
+            .sketch-stage { display:none; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-links">
+        <a href="#shop" class="nav-link"><span>SHOP</span><span>SHOP</span></a>
+        <a href="#about" class="nav-link"><span>ABOUT</span><span>ABOUT</span></a>
+    </div>
+    <div class="nav-logo">Ghaboor</div>
+    <div class="nav-right">
+        <a href="#" class="nav-link"><span>LOOKBOOK</span><span>LOOKBOOK</span></a>
+        <a href="#" class="nav-cart">CART (0)</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+    <div class="hero-bg-text">WEAR</div>
+
+    <div class="hero-topbar">
+        <p class="hero-tag">SS 2026 COLLECTION — LIMITED DROPS</p>
+    </div>
+
+    <div class="hero-titles">
+        <div class="hero-t1" id="heroLine1">WEAR</div>
+        <div class="hero-t2" id="heroLine2">YOUR SOUL</div>
+    </div>
+
+    <!-- Sketch Animation Canvas -->
+    <div class="sketch-stage">
+        <canvas id="sketchCanvas" width="420" height="580"></canvas>
+    </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+    <div class="marquee-track">
+        <span>GHABOOR</span><span>//</span>
+        <span>STREETWEAR REDEFINED</span><span>//</span>
+        <span>EMBRACE THE ENERGY</span><span>//</span>
+        <span>SS 2026</span><span>//</span>
+        <span>WEAR YOUR SOUL</span><span>//</span>
+        <span>GHABOOR</span><span>//</span>
+        <span>STREETWEAR REDEFINED</span><span>//</span>
+        <span>EMBRACE THE ENERGY</span><span>//</span>
+        <span>SS 2026</span><span>//</span>
+        <span>WEAR YOUR SOUL</span><span>//</span>
+        <span>GHABOOR</span><span>//</span>
+        <span>STREETWEAR REDEFINED</span><span>//</span>
+        <span>EMBRACE THE ENERGY</span><span>//</span>
+        <span>SS 2026</span><span>//</span>
+        <span>WEAR YOUR SOUL</span><span>//</span>
+    </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products" id="shop">
+    <div class="sec-head">
+        <h2 class="sec-title">LATEST DROPS</h2>
+        <span class="sec-sub">SS26 COLLECTION</span>
+    </div>
+    <div class="grid">
+        <div class="card">
+            <div class="card-img">
+                <div class="card-bg" style="background:#3a2a1e;"></div>
+                <img src="assets/brown_tee.png" alt="Brown Tee">
+                <div class="card-buy">ADD TO CART +</div>
+            </div>
+            <div class="card-meta">
+                <span class="card-name">HEAVYWEIGHT OVERSIZED TEE</span>
+                <span class="card-price">$85</span>
+            </div>
+            <div class="card-clr">WASHED BROWN</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <div class="card-bg" style="background:#1e2420;"></div>
+                <img src="assets/green_tee.png" alt="Green Tee">
+                <div class="card-buy">ADD TO CART +</div>
+            </div>
+            <div class="card-meta">
+                <span class="card-name">HEAVYWEIGHT OVERSIZED TEE</span>
+                <span class="card-price">$85</span>
+            </div>
+            <div class="card-clr">SAGE GREEN</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <div class="card-bg" style="background:#1a1a1a;"></div>
+                <img src="assets/black_tee.png" alt="Black Tee">
+                <div class="card-buy">ADD TO CART +</div>
+            </div>
+            <div class="card-meta">
+                <span class="card-name">GOTHIC LOGO GRAPHIC TEE</span>
+                <span class="card-price">$95</span>
+            </div>
+            <div class="card-clr">VINTAGE BLACK</div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+    <div class="about-left">
+        <div class="about-badge">
+            <div class="about-logo-big">Ghaboor</div>
+        </div>
+        <div class="about-pills">
+            <span class="pill">✦ 100% HEAVY COTTON</span>
+            <span class="pill">✦ PIGMENT WASHED</span>
+            <span class="pill">✦ BOXY FIT</span>
+            <span class="pill">✦ DROPPED SHOULDER</span>
+        </div>
+    </div>
+    <div class="about-right">
+        <h2>SOMETHING NEW.<br><em>SOMETHING FABULOUS.</em></h2>
+        <p>Ghaboor was born at the crossroads of gothic heritage and raw street energy. Our pieces are not just garments — they are declarations. Each drop is engineered for the loud, the bold, and the unapologetically original.</p>
+        <p>Premium heavyweight cotton, custom pigment washes, and oversized silhouettes built for those who refuse to blend in.</p>
+        <a href="#shop" class="about-cta">EXPLORE THE COLLECTION →</a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="foot-top">
+        <div class="foot-logo">Ghaboor</div>
+        <div class="foot-links-grid">
+            <div class="foot-col">
+                <h4>SHOP</h4>
+                <ul>
+                    <li><a href="#">T-Shirts</a></li>
+                    <li><a href="#">Hoodies</a></li>
+                    <li><a href="#">Accessories</a></li>
+                    <li><a href="#">Archive</a></li>
+                </ul>
+            </div>
+            <div class="foot-col">
+                <h4>SUPPORT</h4>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="foot-col">
+                <h4>JOIN THE CULT</h4>
+                <p style="font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:.75rem;">Exclusive drops &amp; early access.</p>
+                <div class="newsletter-inp">
+                    <input type="email" placeholder="YOUR EMAIL">
+                    <button type="submit">→</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="foot-bottom">
+        <span>© 2026 GHABOOR STUDIOS. ALL RIGHTS RESERVED.</span>
+        <div class="socials">
+            <a href="#">IG</a>
+            <a href="#">TT</a>
+            <a href="#">TW</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+/* ─────────────────────────────────────────────
+   CUSTOM CURSOR
+───────────────────────────────────────────── */
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('a,button,.card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+});
+
+/* ─────────────────────────────────────────────
+   SKETCH ANIMATION — CANVAS 2D
+   States:
+     0  idle — person stands, shirts fall
+     1  reach — arm extends to grab shirt
+     2  grab — shirt travels to body
+     3  wear — shirt settles on person, held
+     4  reset — shirt fades, back to idle
+───────────────────────────────────────────── */
+const canvas = document.getElementById('sketchCanvas');
+const ctx    = canvas.getContext('2d');
+
+const W = canvas.width;
+const H = canvas.height;
+
+// Brand palette
+const COLORS = [
+    { fill:'rgba(180,116,70,0.85)',  stroke:'#b47446', label:'BROWN' },
+    { fill:'rgba(188,198,187,0.85)', stroke:'#bcc6bb', label:'SAGE'  },
+    { fill:'rgba(30,25,27,0.9)',     stroke:'#555555', label:'BLACK' },
+];
+
+// ── Sketch utility ──
+function sketchLine(x1,y1,x2,y2,wobble=2){
+    ctx.beginPath();
+    ctx.moveTo(x1 + rand(-wobble,wobble), y1 + rand(-wobble,wobble));
+    ctx.lineTo(x2 + rand(-wobble,wobble), y2 + rand(-wobble,wobble));
+    ctx.stroke();
+}
+function sketchCircle(cx,cy,r,wobble=2){
+    ctx.beginPath();
+    // draw as slightly irregular polygon for sketchy feel
+    const pts=24;
+    for(let i=0;i<=pts;i++){
+        const a = (i/pts)*Math.PI*2;
+        const rr = r + rand(-wobble,wobble);
+        const x = cx + Math.cos(a)*rr;
+        const y = cy + Math.sin(a)*rr;
+        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+}
+function sketchRect(x,y,w,h,wobble=2){
+    // four sides individually so they look hand-drawn
+    sketchLine(x,y, x+w,y, wobble);
+    sketchLine(x+w,y, x+w,y+h, wobble);
+    sketchLine(x+w,y+h, x,y+h, wobble);
+    sketchLine(x,y+h, x,y, wobble);
+}
+function rand(a,b){ return a + Math.random()*(b-a); }
+function lerp(a,b,t){ return a+(b-a)*t; }
+function easeOut(t){ return 1-(1-t)*(1-t); }
+function easeInOut(t){ return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2; }
+
+// ── Person skeleton points (relative to body centre) ──
+// All coords are canvas units. Person is ~260px tall.
+const pc = { x: W*0.42, y: H*0.52 }; // person center (chest)
+
+const P = {
+    head:   { x:0, y:-130 },
+    neck:   { x:0, y:-100 },
+    shoulder:{ x:0, y:-80 },
+    lSho:   { x:-45, y:-80 },
+    rSho:   { x: 45, y:-80 },
+    lElbow: { x:-70, y:-30 },
+    rElbow: { x: 70, y:-30 },
+    lWrist: { x:-80, y: 20 },
+    rWrist: { x: 80, y: 20 },
+    lHip:   { x:-30, y: 60 },
+    rHip:   { x: 30, y: 60 },
+    lKnee:  { x:-38, y:120 },
+    rKnee:  { x: 38, y:120 },
+    lFoot:  { x:-42, y:180 },
+    rFoot:  { x: 42, y:180 },
+};
+
+// World coords
+function wp(key){ return { x: pc.x+P[key].x, y: pc.y+P[key].y }; }
+
+// ── T-shirt path helper ──
+function drawTshirt(cx,cy,w,h,col,alpha=1,worn=false){
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    const sw = w;
+    const sh = h;
+    // shirt proportions
+    const sleeveW = sw*0.3;
+    const sleeveH = sh*0.35;
+    const neckW   = sw*0.22;
+    const neckD   = sh*0.12;
+
+    ctx.fillStyle   = col.fill;
+    ctx.strokeStyle = worn ? col.stroke : 'rgba(255,255,255,0.55)';
+    ctx.lineWidth   = worn ? 2.5 : 2;
+
+    ctx.beginPath();
+    // left sleeve top-left
+    ctx.moveTo(cx - sw/2, cy - sh/2);
+    // left sleeve bottom
+    ctx.lineTo(cx - sw/2 + sleeveW*0.3, cy - sh/2 + sleeveH);
+    // body left
+    ctx.lineTo(cx - sw/2 + sleeveW*0.5, cy - sh/2 + sleeveH*0.2);
+    ctx.lineTo(cx - sw/2 + sleeveW*0.5, cy + sh/2);
+    // body bottom
+    ctx.lineTo(cx + sw/2 - sleeveW*0.5, cy + sh/2);
+    // body right
+    ctx.lineTo(cx + sw/2 - sleeveW*0.5, cy - sh/2 + sleeveH*0.2);
+    // right sleeve bottom
+    ctx.lineTo(cx + sw/2 - sleeveW*0.3, cy - sh/2 + sleeveH);
+    // right sleeve top right
+    ctx.lineTo(cx + sw/2, cy - sh/2);
+    // top shoulder right
+    ctx.lineTo(cx + neckW/2, cy - sh/2);
+    // neck right curve
+    ctx.quadraticCurveTo(cx + neckW/2, cy - sh/2 + neckD, cx, cy - sh/2 + neckD);
+    ctx.quadraticCurveTo(cx - neckW/2, cy - sh/2 + neckD, cx - neckW/2, cy - sh/2);
+    ctx.closePath();
+
+    if(worn){
+        ctx.fill();
+    }
+    ctx.stroke();
+    ctx.restore();
+}
+
+// ── State machine ──
+const PHASE = { IDLE:0, FALL:1, REACH:2, GRAB:3, WEAR:4, HOLD:5, UNFADE:6 };
+let phase = PHASE.IDLE;
+let phaseTimer = 0;
+
+// Falling shirts
+let shirts = [];
+let activeShirt = null; // shirt being picked
+let colorIdx = 0;
+
+function makeShirt(){
+    const col = COLORS[colorIdx % COLORS.length];
+    colorIdx++;
+    return {
+        x: rand(W*0.1, W*0.75),
+        y: -60,
+        vy: rand(1.8, 3.2),
+        rot: rand(-0.4, 0.4),
+        rotV: rand(-0.02, 0.02),
+        w: rand(68,88),
+        h: rand(78,96),
+        col,
+        alpha:1,
+        landed:false,
+        landY: rand(H*0.15, H*0.4),
+    };
+}
+
+// Arm interpolation target
+let armTarget = { x: 0, y: 0 }; // world coords of hand target
+let armT = 0; // 0=rest, 1=extended
+
+// Worn shirt display
+let wornShirt = null;
+let wornAlpha = 0;
+let holdTimer = 0;
+
+const SHIRT_SPAWN_INTERVAL = 90; // frames
+let spawnTimer = 0;
+let frameCount = 0;
+const IDLE_SHIRT_COUNT = 3; // how many shirts fall before pick
+
+let idleCount = 0;
+
+function resetCycle(){
+    shirts = [];
+    activeShirt = null;
+    wornShirt = null;
+    wornAlpha = 0;
+    armT = 0;
+    armTarget = { x:0, y:0 };
+    idleCount = 0;
+    spawnTimer = 0;
+    phase = PHASE.IDLE;
+    phaseTimer = 0;
+}
+
+// ── Draw person ──
+function drawPerson(rArmOverride){
+    ctx.save();
+    ctx.strokeStyle = 'rgba(245,240,235,0.82)';
+    ctx.lineWidth   = 2.2;
+    ctx.lineCap     = 'round';
+    ctx.lineJoin    = 'round';
+
+    const w = (k) => wp(k);
+
+    // head
+    sketchCircle(w('head').x, w('head').y, 24, 2.5);
+
+    // neck
+    sketchLine(w('head').x, w('head').y+24, w('neck').x, w('neck').y, 1.5);
+
+    // shoulders
+    sketchLine(w('lSho').x, w('lSho').y, w('rSho').x, w('rSho').y, 1.5);
+
+    // spine
+    sketchLine(w('shoulder').x, w('shoulder').y, pc.x, pc.y+60, 2);
+
+    // torso outline (rough rectangle)
+    ctx.lineWidth = 1.8;
+    sketchLine(w('lSho').x, w('lSho').y, w('lHip').x, w('lHip').y, 2);
+    sketchLine(w('rSho').x, w('rSho').y, w('rHip').x, w('rHip').y, 2);
+    sketchLine(w('lHip').x, w('lHip').y, w('rHip').x, w('rHip').y, 2);
+    ctx.lineWidth = 2.2;
+
+    // left arm (static)
+    sketchLine(w('lSho').x, w('lSho').y, w('lElbow').x, w('lElbow').y, 2);
+    sketchLine(w('lElbow').x, w('lElbow').y, w('lWrist').x, w('lWrist').y, 2);
+
+    // right arm (dynamic — reaching)
+    if(rArmOverride){
+        const elbow = {
+            x: lerp(w('rElbow').x, (w('rSho').x+rArmOverride.x)/2, armT),
+            y: lerp(w('rElbow').y, (w('rSho').y+rArmOverride.y)/2 - 40*armT, armT),
+        };
+        sketchLine(w('rSho').x, w('rSho').y, elbow.x, elbow.y, 2);
+        sketchLine(elbow.x, elbow.y, rArmOverride.x, rArmOverride.y, 2);
+    } else {
+        sketchLine(w('rSho').x, w('rSho').y, w('rElbow').x, w('rElbow').y, 2);
+        sketchLine(w('rElbow').x, w('rElbow').y, w('rWrist').x, w('rWrist').y, 2);
+    }
+
+    // legs
+    sketchLine(w('lHip').x, w('lHip').y, w('lKnee').x, w('lKnee').y, 2);
+    sketchLine(w('lKnee').x, w('lKnee').y, w('lFoot').x, w('lFoot').y, 2);
+    sketchLine(w('rHip').x, w('rHip').y, w('rKnee').x, w('rKnee').y, 2);
+    sketchLine(w('rKnee').x, w('rKnee').y, w('rFoot').x, w('rFoot').y, 2);
+
+    // shoes (small arcs)
+    ctx.lineWidth = 3;
+    sketchLine(w('lFoot').x-14, w('lFoot').y, w('lFoot').x+10, w('lFoot').y, 1.5);
+    sketchLine(w('rFoot').x-10, w('rFoot').y, w('rFoot').x+14, w('rFoot').y, 1.5);
+
+    // small hair strokes on head
+    ctx.lineWidth = 1.2;
+    for(let i=0;i<7;i++){
+        const a = -Math.PI*0.9 + (i/6)*Math.PI*0.8;
+        sketchLine(
+            w('head').x+Math.cos(a)*22, w('head').y+Math.sin(a)*22,
+            w('head').x+Math.cos(a)*28, w('head').y+Math.sin(a)*28,
+            1
+        );
+    }
+
+    ctx.restore();
+}
+
+// ── Shadow / ground ──
+function drawGround(){
+    const gx = pc.x, gy = pc.y + P.lFoot.y + 8;
+    ctx.save();
+    const grad = ctx.createRadialGradient(gx,gy,0,gx,gy,80);
+    grad.addColorStop(0,'rgba(180,116,70,0.18)');
+    grad.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.ellipse(gx,gy,80,14,0,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+}
+
+// ── Main animation loop ──
+function tick(){
+    frameCount++;
+    ctx.clearRect(0,0,W,H);
+
+    // Subtle background
+    ctx.fillStyle='rgba(14,12,13,0)';
+    ctx.fillRect(0,0,W,H);
+
+    // ── Ground shadow ──
+    drawGround();
+
+    // ── Worn shirt (on body) ──
+    if(wornShirt && wornAlpha > 0){
+        const torsoCenter = { x: pc.x + 2, y: pc.y - 15 };
+        drawTshirt(torsoCenter.x, torsoCenter.y, 95, 110, wornShirt.col, wornAlpha, true);
+    }
+
+    // ── Person ──
+    let handPos = null;
+    if(phase===PHASE.REACH || phase===PHASE.GRAB){
+        handPos = armTarget;
+    }
+    drawPerson(handPos);
+
+    // ── Fallen/falling shirts ──
+    for(let s of shirts){
+        if(s===activeShirt && (phase===PHASE.GRAB||phase===PHASE.WEAR||phase===PHASE.HOLD)) continue;
+
+        ctx.save();
+        ctx.translate(s.x, s.y);
+        ctx.rotate(s.rot);
+        drawTshirt(0,0,s.w,s.h,s.col,s.alpha,false);
+        ctx.restore();
+
+        // update physics
+        if(!s.landed){
+            s.y  += s.vy;
+            s.vy += 0.08;
+            s.rot += s.rotV;
+            if(s.y >= s.landY){
+                s.y = s.landY;
+                s.vy  *= -0.3; // bounce
+                s.rotV *= 0.5;
+                if(Math.abs(s.vy)<0.5) s.landed=true;
+            }
+        } else {
+            s.rotV *= 0.92;
+            s.rot   += s.rotV;
+        }
+    }
+
+    // ── Active shirt travelling to hand ──
+    if(activeShirt && phase===PHASE.GRAB){
+        const t = easeInOut(Math.min(phaseTimer/40,1));
+        const tx = lerp(activeShirt.x, armTarget.x, t);
+        const ty = lerp(activeShirt.y, armTarget.y, t);
+        ctx.save();
+        ctx.translate(tx,ty);
+        ctx.rotate(lerp(activeShirt.rot, 0, t));
+        drawTshirt(0,0,activeShirt.w,activeShirt.h,activeShirt.col,1,false);
+        ctx.restore();
+    }
+
+    // ── State transitions ──
+    phaseTimer++;
+
+    if(phase===PHASE.IDLE){
+        spawnTimer++;
+        armT = lerp(armT, 0, 0.08); // arm returns
+        if(wornAlpha>0) wornAlpha = lerp(wornAlpha,0,0.03);
+
+        if(spawnTimer > SHIRT_SPAWN_INTERVAL && shirts.length < IDLE_SHIRT_COUNT+1){
+            shirts.push(makeShirt());
+            spawnTimer=0;
+            idleCount++;
+        }
+        // After 2 shirts have landed, pick one
+        const landed = shirts.filter(s=>s.landed);
+        if(landed.length >= 2 && shirts.length >= 2){
+            // pick the nearest shirt to the right hand
+            const rHand = wp('rWrist');
+            let pick = landed.reduce((best,s)=>{
+                const d = Math.hypot(s.x-rHand.x, s.y-rHand.y);
+                const bd= Math.hypot(best.x-rHand.x, best.y-rHand.y);
+                return d<bd ? s : best;
+            });
+            activeShirt = pick;
+            armTarget = { x:pick.x, y:pick.y };
+            phase = PHASE.REACH;
+            phaseTimer = 0;
+        }
+    }
+
+    if(phase===PHASE.REACH){
+        armT = lerp(armT, 1, 0.05);
+        if(phaseTimer > 50){
+            phase = PHASE.GRAB;
+            phaseTimer = 0;
+        }
+    }
+
+    if(phase===PHASE.GRAB){
+        armT = lerp(armT, 0.5, 0.04);
+        // move arm target toward torso
+        const torsoT = easeInOut(Math.min(phaseTimer/50,1));
+        armTarget.x = lerp(activeShirt.x, pc.x+10, torsoT);
+        armTarget.y = lerp(activeShirt.y, pc.y-50, torsoT);
+
+        if(phaseTimer>50){
+            // shirt is on body now
+            wornShirt = activeShirt;
+            wornAlpha = 0;
+            phase = PHASE.WEAR;
+            phaseTimer = 0;
+            // remove from shirts array
+            shirts = shirts.filter(s=>s!==activeShirt);
+        }
+    }
+
+    if(phase===PHASE.WEAR){
+        wornAlpha = Math.min(wornAlpha+0.04,1);
+        armT = lerp(armT, 0, 0.06);
+        if(phaseTimer>40){
+            phase = PHASE.HOLD;
+            phaseTimer=0;
+        }
+    }
+
+    if(phase===PHASE.HOLD){
+        holdTimer = phaseTimer;
+        // hold the look for 140 frames
+        if(phaseTimer > 140){
+            phase = PHASE.UNFADE;
+            phaseTimer=0;
+        }
+    }
+
+    if(phase===PHASE.UNFADE){
+        // fade out worn shirt and other shirts, then restart
+        wornAlpha = lerp(wornAlpha, 0, 0.05);
+        shirts.forEach(s=>{ s.alpha=lerp(s.alpha,0,0.04); });
+        if(wornAlpha < 0.05 && phaseTimer>60){
+            resetCycle();
+        }
+    }
+
+    requestAnimationFrame(tick);
+}
+
+// Kick off after a short delay
+setTimeout(()=>{ shirts.push(makeShirt()); tick(); }, 400);
+
+/* ─────────────────────────────────────────────
+   HERO TEXT ENTRANCE
+───────────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded',()=>{
+    const t1 = document.getElementById('heroLine1');
+    const t2 = document.getElementById('heroLine2');
+    t1.style.cssText='opacity:0;transform:translateY(40px);transition:opacity .9s ease, transform .9s ease;';
+    t2.style.cssText='opacity:0;transform:translateY(40px);transition:opacity .9s ease .15s, transform .9s ease .15s;';
+    setTimeout(()=>{
+        t1.style.opacity='1'; t1.style.transform='translateY(0)';
+        t2.style.opacity='1'; t2.style.transform='translateY(0)';
+    },300);
+});
+</script>
+</body>
+</html>
