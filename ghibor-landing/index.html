@@ -427,7 +427,7 @@
     for(const f of fields){ if(!f.ok(f.inp.value.trim())){ shake(f); return; } }
     sb.disabled=true; sb.textContent='Sending…';
     try{
-      const r=await fetch('send.php',{
+      const r=await fetch('/api/send',{
         method:'POST',
         headers:{'Content-Type':'application/json','Accept':'application/json'},
         body:JSON.stringify({

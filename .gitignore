@@ -1,8 +1,9 @@
 # PHPMailer — upload to server manually, not via git
 ghibor-landing/PHPMailer/
 
-# Mailer — contains Gmail credentials, never commit
+# PHP mailer (replaced by Vercel serverless function)
 ghibor-landing/send.php
+ghibor-landing/PHPMailer/
 
 # Design source files — too large for GitHub
 *.psd
