@@ -13,10 +13,10 @@
 
     :root {
       --bg:   #060504;
-      --bone: #d2ccbf;
-      --mid:  #9a9288;
-      --dim:  #5c5854;
-      --line: rgba(140,134,124,0.22);
+      --bone: #e2dcd2;
+      --mid:  #c0b8ae;
+      --dim:  #908880;
+      --line: rgba(180,172,160,0.32);
     }
 
     html { scroll-behavior: smooth; }
@@ -56,12 +56,18 @@
         rgba(30,10,50,0.55) 0%, rgba(12,6,18,0.25) 50%, transparent 100%);
       pointer-events: none; z-index: 1;
     }
-    /* subtle centre spotlight so content lifts from the dark prints */
+    /* dark column behind text so it reads cleanly over print art */
     .void-center {
       position: fixed; inset: 0;
-      background: radial-gradient(ellipse 44% 80% at 50% 42%,
-        rgba(8,6,5,0.55) 0%, transparent 70%);
       pointer-events: none; z-index: 4;
+      /* vertical dark band through centre */
+      background:
+        linear-gradient(to right,
+          transparent 0%,
+          rgba(5,4,3,0.72) 28%,
+          rgba(5,4,3,0.82) 50%,
+          rgba(5,4,3,0.72) 72%,
+          transparent 100%);
     }
 
     /* ── Print art panels ───────────────────────────────────────── */
@@ -135,11 +141,11 @@
       display: flex; align-items: center; justify-content: space-between;
       z-index: 20;
     }
-    .nav-l { font-size: 8px; font-weight: 400; letter-spacing: 0.5em; text-transform: uppercase; color: var(--dim); }
+    .nav-l { font-size: 8px; font-weight: 400; letter-spacing: 0.5em; text-transform: uppercase; color: var(--mid); }
     .nav-r { display: flex; gap: 22px; }
     .nav-r a {
       font-size: 8px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase;
-      color: var(--dim); text-decoration: none; transition: color 0.3s;
+      color: var(--mid); text-decoration: none; transition: color 0.3s;
     }
     .nav-r a:hover { color: var(--bone); }
 
@@ -163,9 +169,9 @@
 
     /* ── Tagline under logo ─────────────────────────────────────── */
     .brand-line {
-      font-size: 8.5px; font-weight: 300;
-      letter-spacing: 0.62em; text-transform: uppercase;
-      color: var(--dim); margin-top: 22px;
+      font-size: 9px; font-weight: 400;
+      letter-spacing: 0.55em; text-transform: uppercase;
+      color: var(--mid); margin-top: 22px;
       opacity: 0;
       animation: arise 2s cubic-bezier(0.16,1,0.3,1) 1s forwards;
     }
@@ -189,9 +195,9 @@
 
     /* ── Tag ────────────────────────────────────────────────────── */
     .tag {
-      font-size: 7.5px; font-weight: 300;
-      letter-spacing: 0.68em; text-transform: uppercase;
-      color: var(--mid); margin-bottom: 36px; text-align: center;
+      font-size: 8px; font-weight: 400;
+      letter-spacing: 0.65em; text-transform: uppercase;
+      color: var(--bone); margin-bottom: 36px; text-align: center;
     }
 
     /* ── Form ───────────────────────────────────────────────────── */
@@ -201,48 +207,48 @@
     .field { margin-bottom: 30px; }
 
     .field label {
-      display: block; font-size: 8px; font-weight: 400;
-      letter-spacing: 0.5em; text-transform: uppercase;
-      color: var(--mid); margin-bottom: 10px;
+      display: block; font-size: 9px; font-weight: 500;
+      letter-spacing: 0.42em; text-transform: uppercase;
+      color: var(--bone); margin-bottom: 10px;
     }
     .field input, .field textarea {
       width: 100%; background: none; border: none;
-      border-bottom: 1px solid #2e2c28;
+      border-bottom: 1px solid rgba(180,172,160,0.25);
       outline: none; padding: 8px 0 12px;
-      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 300;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 300;
       letter-spacing: 0.06em; color: var(--bone);
       transition: border-color 0.4s; caret-color: var(--bone);
     }
-    .field input:focus, .field textarea:focus { border-color: #5c5854; }
+    .field input:focus, .field textarea:focus { border-color: rgba(200,192,180,0.55); }
     .field input::placeholder, .field textarea::placeholder {
-      color: #3e3c38; font-style: italic; letter-spacing: 0.04em;
+      color: var(--dim); font-style: italic; letter-spacing: 0.04em;
     }
     .field textarea { resize: none; height: 78px; line-height: 1.85; }
-    .field.err input, .field.err textarea { border-color: rgba(110,28,28,0.8); }
+    .field.err input, .field.err textarea { border-color: rgba(140,40,40,0.8); }
 
     .sep { width: 100%; height: 1px; background: var(--line); margin: 6px 0 28px; }
 
     .submit-btn {
-      width: 100%; background: none; border: 1px solid #2e2c28;
+      width: 100%; background: none; border: 1px solid rgba(180,172,160,0.3);
       padding: 15px 0;
-      font-family: 'Inter', sans-serif; font-size: 8px; font-weight: 700;
-      letter-spacing: 0.55em; text-transform: uppercase;
-      color: var(--mid); cursor: pointer;
-      transition: border-color 0.4s, color 0.4s;
+      font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 600;
+      letter-spacing: 0.52em; text-transform: uppercase;
+      color: var(--bone); cursor: pointer;
+      transition: border-color 0.4s, background 0.4s;
     }
-    .submit-btn:hover { border-color: var(--mid); color: var(--bone); }
+    .submit-btn:hover { border-color: var(--bone); background: rgba(220,212,200,0.05); }
     .submit-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
     .form-note {
-      font-size: 7.5px; font-weight: 300; letter-spacing: 0.22em;
-      text-transform: uppercase; color: var(--dim);
+      font-size: 8px; font-weight: 300; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--mid);
       text-align: center; margin-top: 14px;
     }
     .success {
-      display: none; font-size: 8.5px; font-weight: 300;
+      display: none; font-size: 9px; font-weight: 300;
       letter-spacing: 0.44em; text-transform: uppercase;
       color: var(--mid); text-align: center;
-      padding: 18px 0 4px; line-height: 2.2;
+      padding: 18px 0 4px; line-height: 2.4;
     }
 
     /* ── Footer strip ───────────────────────────────────────────── */
@@ -254,7 +260,7 @@
     }
     .footer-strip span, .footer-strip a {
       font-size: 7px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--dim); text-decoration: none; pointer-events: all;
+      color: var(--mid); text-decoration: none; pointer-events: all;
     }
     .footer-strip a:hover { color: var(--bone); }
 
@@ -268,9 +274,9 @@
     .mq-track { display: flex; white-space: nowrap; animation: mq 48s linear infinite; }
     .mq-track span {
       font-size: 7px; font-weight: 700; letter-spacing: 0.38em; text-transform: uppercase;
-      color: #4a4640; padding-right: 90px;
+      color: var(--dim); padding-right: 90px;
     }
-    .mq-track span em { font-style: normal; color: #7a6040; }
+    .mq-track span em { font-style: normal; color: #a07848; }
     @keyframes mq { from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
 
     /* ── Shared entrance animation ──────────────────────────────── */
