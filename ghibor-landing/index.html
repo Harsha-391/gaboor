@@ -427,7 +427,7 @@
     for(const f of fields){ if(!f.ok(f.inp.value.trim())){ shake(f); return; } }
     sb.disabled=true; sb.textContent='Sending…';
     try{
-      const r=await fetch('https://formsubmit.co/ajax/sneezeconnect@gmail.com',{
+      const r=await fetch('send.php',{
         method:'POST',
         headers:{'Content-Type':'application/json','Accept':'application/json'},
         body:JSON.stringify({
@@ -435,8 +435,6 @@
           phone:  document.getElementById('ph').value.trim(),
           email:  document.getElementById('em').value.trim(),
           message:document.getElementById('msg').value.trim(),
-          _subject:'Ghubor — Early Access Registration',
-          _template:'table', _captcha:'false'
         })
       });
       const data=await r.json();

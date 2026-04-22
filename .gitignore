@@ -1,3 +1,6 @@
+# PHPMailer — upload to server manually, not via git
+ghibor-landing/PHPMailer/
+
 # Design source files — too large for GitHub
 *.psd
 *.ai
