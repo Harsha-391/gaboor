@@ -1,218 +1,776 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GHIBOR | Streetwear Redefined</title>
-    <meta name="description" content="Discover GHIBOR, the energetic and fabulous streetwear t-shirt brand. Explore our new collection featuring premium cotton and edgy designs.">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GHUBOR</title>
+  <meta name="description" content="Ghubor — Something is coming.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Inter:wght@300;400;700;900&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #080808;
+      --warm: #d8d0c3;
+      --dim: #3c3430;
+      --dim2: #5a5250;
+      --accent: #b84e10;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      color: var(--warm);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* ── Grain ──────────────────────────────────────────────────── */
+    #grain {
+      position: fixed;
+      pointer-events: none;
+      z-index: 80;
+      opacity: 0.04;
+      animation: grain-shift 0.13s steps(1) infinite;
+    }
+
+    @keyframes grain-shift {
+      0% {
+        transform: translate(0%, 0%);
+      }
+
+      14% {
+        transform: translate(-4%, -6%);
+      }
+
+      28% {
+        transform: translate(7%, 3%);
+      }
+
+      42% {
+        transform: translate(-6%, 8%);
+      }
+
+      57% {
+        transform: translate(3%, -4%);
+      }
+
+      71% {
+        transform: translate(-8%, 5%);
+      }
+
+      85% {
+        transform: translate(5%, -8%);
+      }
+
+      100% {
+        transform: translate(-3%, 4%);
+      }
+    }
+
+    /* ── Atmospheric bleed ──────────────────────────────────────── */
+    .atm {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 55vh;
+      background: radial-gradient(ellipse 70% 90% at 50% 0%,
+          rgba(110, 8, 8, 0.22) 0%,
+          rgba(55, 0, 35, 0.10) 45%,
+          transparent 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── T-shirt ghost overlays ─────────────────────────────────── */
+    .tee {
+      position: fixed;
+      pointer-events: none;
+      z-index: 2;
+      filter: grayscale(1) brightness(2.5) contrast(0.72);
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .tee.tl {
+      width: clamp(240px, 28vw, 480px);
+      top: -55px;
+      left: -40px;
+      opacity: 0.06;
+      transform: rotate(-15deg);
+    }
+
+    .tee.tr {
+      width: clamp(220px, 26vw, 440px);
+      top: 30px;
+      right: -65px;
+      opacity: 0.05;
+      transform: rotate(12deg);
+    }
+
+    .tee.bc {
+      width: clamp(200px, 22vw, 360px);
+      bottom: -85px;
+      left: 50%;
+      opacity: 0.036;
+      transform: translateX(-50%) rotate(-4deg);
+    }
+
+    /* ── Bats ───────────────────────────────────────────────────── */
+    .bat {
+      position: fixed;
+      pointer-events: none;
+      z-index: 4;
+      opacity: 0.16;
+    }
+
+    .bat svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .bwl {
+      animation: bflap 0.44s ease-in-out infinite alternate;
+      transform-origin: 50% 60%;
+    }
+
+    .bwr {
+      animation: bflap 0.44s ease-in-out infinite alternate-reverse;
+      transform-origin: 50% 60%;
+    }
+
+    @keyframes bflap {
+      from {
+        transform: scaleY(1)
+      }
+
+      to {
+        transform: scaleY(0.25)
+      }
+    }
+
+    .bat.b1 {
+      width: 36px;
+      height: 15px;
+      top: 13%;
+      left: 5%;
+      animation: bfly1 30s linear infinite;
+    }
+
+    .bat.b2 {
+      width: 26px;
+      height: 11px;
+      top: 25%;
+      right: 9%;
+      animation: bfly2 42s linear infinite;
+      animation-delay: -16s;
+    }
+
+    .bat.b3 {
+      width: 20px;
+      height: 8px;
+      top: 8%;
+      right: 22%;
+      animation: bfly1 52s linear infinite;
+      animation-delay: -26s;
+    }
+
+    @keyframes bfly1 {
+      0% {
+        transform: translateX(-120px);
+      }
+
+      100% {
+        transform: translateX(110vw);
+      }
+    }
+
+    @keyframes bfly2 {
+      0% {
+        transform: translateX(120px) scaleX(-1);
+      }
+
+      100% {
+        transform: translateX(-110vw) scaleX(-1);
+      }
+    }
+
+    /* ── Nav ────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 58px;
+      padding: 0 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+
+    .nav-logo {
+      font-family: 'UnifrakturMaguntia', serif;
+      font-size: 21px;
+      color: var(--warm);
+      opacity: 0.45;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+    }
+
+    .nav-links a {
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--dim2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--warm);
+    }
+
+    /* ── Page ───────────────────────────────────────────────────── */
+    .page {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 90px;
+    }
+
+    /* ── Tag ────────────────────────────────────────────────────── */
+    .tag {
+      font-size: 8px;
+      letter-spacing: 0.8em;
+      text-transform: uppercase;
+      color: var(--dim2);
+      margin-bottom: 22px;
+    }
+
+    /* ── Logo ───────────────────────────────────────────────────── */
+    .logo-wrap {
+      position: relative;
+      margin-bottom: 36px;
+    }
+
+    .logo {
+      font-family: 'UnifrakturMaguntia', serif;
+      font-size: clamp(66px, 13.5vw, 172px);
+      line-height: 0.88;
+      color: var(--warm);
+      text-align: center;
+      text-shadow:
+        0 0 5px rgba(184, 78, 16, 0.08),
+        0 0 28px rgba(110, 8, 8, 0.06);
+      display: block;
+    }
+
+    /* Blood drips */
+    .drips {
+      position: absolute;
+      bottom: -1px;
+      left: 12%;
+      right: 12%;
+      height: 50px;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      pointer-events: none;
+    }
+
+    .d {
+      border-radius: 0 0 50% 50%;
+      background: linear-gradient(to bottom, #5c0000, #991010);
+      animation: dfall linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes dfall {
+      0% {
+        height: 0;
+        opacity: 0;
+      }
+
+      8% {
+        opacity: 0.65;
+      }
+
+      78% {
+        height: 42px;
+        opacity: 0.50;
+      }
+
+      95% {
+        opacity: 0;
+      }
+
+      100% {
+        height: 50px;
+        opacity: 0;
+      }
+    }
+
+    /* ── Divider ────────────────────────────────────────────────── */
+    .rule {
+      width: 1px;
+      height: 42px;
+      background: linear-gradient(to bottom, transparent, var(--dim), transparent);
+      margin-bottom: 26px;
+    }
+
+    /* ── Tagline ────────────────────────────────────────────────── */
+    .tagline {
+      font-size: 9px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--dim2);
+      margin-bottom: 40px;
+    }
+
+    /* ── Form ───────────────────────────────────────────────────── */
+    .form-wrap {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .field {
+      margin-bottom: 22px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: #908880;
+      margin-bottom: 8px;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      background: none;
+      border: none;
+      border-bottom: 1px solid #4a4440;
+      outline: none;
+      padding: 8px 0 11px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--warm);
+      transition: border-color 0.3s;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: rgba(216, 208, 195, 0.5);
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #5e5856;
+      letter-spacing: 0.1em;
+    }
+
+    .field textarea {
+      resize: none;
+      height: 70px;
+      line-height: 1.7;
+    }
+
+    .field.err input,
+    .field.err textarea {
+      border-color: rgba(139, 0, 0, 0.65);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: none;
+      border: 1px solid #4a4440;
+      padding: 14px 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--warm);
+      cursor: pointer;
+      transition: border-color 0.3s, background 0.3s;
+      margin-top: 6px;
+    }
+
+    .submit-btn:hover {
+      border-color: var(--warm);
+      background: rgba(216, 208, 195, 0.04);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .form-note {
+      font-size: 8px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #706868;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .success {
+      display: none;
+      font-size: 8.5px;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-align: center;
+      padding: 12px 0;
+    }
+
+    /* ── Socials / copy ─────────────────────────────────────────── */
+    .socials {
+      position: fixed;
+      bottom: 52px;
+      left: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      z-index: 20;
+    }
+
+    .socials a {
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .socials a:hover {
+      color: var(--warm);
+    }
+
+    .copy {
+      position: fixed;
+      bottom: 52px;
+      right: 36px;
+      font-size: 7.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--dim);
+      z-index: 20;
+    }
+
+    /* ── Marquee ────────────────────────────────────────────────── */
+    .mq {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 36px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      border-top: 1px solid rgba(184, 78, 16, 0.22);
+      background: rgba(8, 8, 8, 0.96);
+      z-index: 30;
+    }
+
+    .mq-track {
+      display: flex;
+      white-space: nowrap;
+      animation: mq-run 38s linear infinite;
+    }
+
+    .mq-track span {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding-right: 80px;
+    }
+
+    @keyframes mq-run {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 500px) {
+      nav {
+        padding: 0 20px;
+      }
+
+      .socials,
+      .copy {
+        display: none;
+      }
+
+      .field-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="custom-cursor"></div>
 
-    <header class="navbar">
-        <div class="nav-links">
-            <a href="#shop" class="nav-link" data-text="SHOP">SHOP</a>
-            <a href="#about" class="nav-link" data-text="ABOUT">ABOUT</a>
-        </div>
-        <div class="logo">
-            <h1 class="logo-text">Ghibor</h1>
-        </div>
-        <div class="nav-links right">
-            <a href="#lookbook" class="nav-link" data-text="LOOKBOOK">LOOKBOOK</a>
-            <a href="#cart" class="nav-link cart-btn">CART (0)</a>
-        </div>
-        <div class="menu-toggle">
-            <span></span>
-            <span></span>
-        </div>
-    </header>
+  <canvas id="grain"></canvas>
+  <div class="atm"></div>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu">
-        <div class="mobile-nav-links">
-            <a href="#shop" class="mobile-nav-link">SHOP</a>
-            <a href="#about" class="mobile-nav-link">ABOUT</a>
-            <a href="#lookbook" class="mobile-nav-link">LOOKBOOK</a>
-            <a href="#cart" class="mobile-nav-link">CART (0)</a>
-        </div>
+  <!-- T-shirt ghost teasers -->
+  <img class="tee tl" src="assets/brown_tee.png" alt="" draggable="false">
+  <img class="tee tr" src="assets/green_tee.png" alt="" draggable="false">
+  <img class="tee bc" src="assets/black_tee.png" alt="" draggable="false">
+
+  <!-- Bats -->
+  <div class="bat b1" aria-hidden="true">
+    <svg viewBox="0 0 80 32">
+      <ellipse cx="40" cy="20" rx="4.5" ry="6.5" fill="#d8d0c3" />
+      <ellipse cx="40" cy="15" rx="3.5" ry="4.5" fill="#d8d0c3" />
+      <path d="M36,13L34,6L38,12ZM44,13L46,6L42,12Z" fill="#d8d0c3" />
+      <path class="bwl" d="M35,17C30,9 14,3 2,13C7,12 13,11 17,17C12,17 10,23 14,26C18,22 26,18 35,18Z"
+        fill="#d8d0c3" />
+      <path class="bwr" d="M45,17C50,9 66,3 78,13C73,12 67,11 63,17C68,17 70,23 66,26C62,22 54,18 45,18Z"
+        fill="#d8d0c3" />
+    </svg>
+  </div>
+  <div class="bat b2" aria-hidden="true">
+    <svg viewBox="0 0 80 32">
+      <ellipse cx="40" cy="20" rx="4.5" ry="6.5" fill="#d8d0c3" />
+      <ellipse cx="40" cy="15" rx="3.5" ry="4.5" fill="#d8d0c3" />
+      <path d="M36,13L34,6L38,12ZM44,13L46,6L42,12Z" fill="#d8d0c3" />
+      <path class="bwl" d="M35,17C30,9 14,3 2,13C7,12 13,11 17,17C12,17 10,23 14,26C18,22 26,18 35,18Z"
+        fill="#d8d0c3" />
+      <path class="bwr" d="M45,17C50,9 66,3 78,13C73,12 67,11 63,17C68,17 70,23 66,26C62,22 54,18 45,18Z"
+        fill="#d8d0c3" />
+    </svg>
+  </div>
+  <div class="bat b3" aria-hidden="true">
+    <svg viewBox="0 0 80 32">
+      <ellipse cx="40" cy="20" rx="4.5" ry="6.5" fill="#d8d0c3" />
+      <ellipse cx="40" cy="15" rx="3.5" ry="4.5" fill="#d8d0c3" />
+      <path d="M36,13L34,6L38,12ZM44,13L46,6L42,12Z" fill="#d8d0c3" />
+      <path class="bwl" d="M35,17C30,9 14,3 2,13C7,12 13,11 17,17C12,17 10,23 14,26C18,22 26,18 35,18Z"
+        fill="#d8d0c3" />
+      <path class="bwr" d="M45,17C50,9 66,3 78,13C73,12 67,11 63,17C68,17 70,23 66,26C62,22 54,18 45,18Z"
+        fill="#d8d0c3" />
+    </svg>
+  </div>
+
+  <!-- Nav -->
+  <nav>
+    <span class="nav-logo">Ghubor</span>
+    <div class="nav-links">
+      <a href="#">IG</a>
+      <a href="#">TK</a>
+      <a href="#">TT</a>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="page">
+
+    <p class="tag">— Coming Soon —</p>
+
+    <div class="logo-wrap">
+      <span class="logo" aria-label="Ghubor">Ghubor</span>
+      <div class="drips" id="drips" aria-hidden="true"></div>
     </div>
 
-    <main data-scroll-container>
-        <!-- Hero Section -->
-        <section class="hero" id="home">
-            <div class="hero-bg">
-                <div class="overlay"></div>
-                <img class="hero-image" src="assets/hero.png" alt="Ghibor Streetwear Model in motion">
-            </div>
-            <div class="hero-content">
-                <div class="hero-text-wrapper">
-                    <h2 class="hero-title glitch-text" data-text="FABULOUS">FABULOUS</h2>
-                    <h2 class="hero-title hero-title-outline">ENERGY</h2>
-                </div>
-                <div class="hero-bottom">
-                    <p class="hero-subtitle">SS26 COLLECTION. A NEW ERA OF STREETWEAR.<br> PREMIUM HEAVY COTTON EXCLUSIVES.</p>
-                    <a href="#shop" class="hero-cta">
-                        <span class="cta-text">EXPLORE COLLECTION</span>
-                        <div class="cta-circle">
-                            <span class="arrow">↓</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
+    <div class="rule"></div>
+    <p class="tagline">Streetwear for the chosen few</p>
 
-        <!-- Marquee Section -->
-        <div class="marquee-container">
-            <div class="marquee" aria-hidden="true">
-                <span>GHIBOR // STREETWEAR REDEFINED // EMBRACE THE ENERGY // STAY FABULOUS // </span>
-                <span>GHIBOR // STREETWEAR REDEFINED // EMBRACE THE ENERGY // STAY FABULOUS // </span>
-                <span>GHIBOR // STREETWEAR REDEFINED // EMBRACE THE ENERGY // STAY FABULOUS // </span>
-            </div>
+    <div class="form-wrap" id="form-wrap">
+
+      <div class="field-row">
+        <div class="field" id="f-name">
+          <label for="nm">Name</label>
+          <input type="text" id="nm" placeholder="Full name" autocomplete="name">
         </div>
-
-        <!-- Collection Section -->
-        <section class="collection" id="shop">
-            <div class="section-header">
-                <h3 class="section-title">LATEST DROPS</h3>
-                <a href="#" class="view-all">VIEW ARCHIVE →</a>
-            </div>
-            
-            <div class="product-grid">
-                <!-- Product 1 -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <div class="product-bg" style="background-color: #bcc6bb;"></div>
-                        <img src="assets/brown_tee.png" alt="Washed Brown Heavy Tee" class="product-image">
-                        <div class="add-to-cart">
-                            <span>ADD +</span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-meta">
-                            <h4 class="product-name">HEAVYWEIGHT OVERSIZED TEE</h4>
-                            <span class="product-price">$85</span>
-                        </div>
-                        <p class="product-color">WASHED BROWN</p>
-                    </div>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <div class="product-bg" style="background-color: #282828;"></div>
-                        <img src="assets/green_tee.png" alt="Sage Green Heavy Tee" class="product-image">
-                        <div class="add-to-cart">
-                            <span>ADD +</span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-meta">
-                            <h4 class="product-name">HEAVYWEIGHT OVERSIZED TEE</h4>
-                            <span class="product-price">$85</span>
-                        </div>
-                        <p class="product-color">SAGE GREEN</p>
-                    </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <div class="product-bg" style="background-color: #ffffff;"></div>
-                        <img src="assets/black_tee.png" alt="Vintage Black Graphic Tee" class="product-image">
-                        <div class="add-to-cart">
-                            <span>ADD +</span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-meta">
-                            <h4 class="product-name">GOTHIC LOGO GRAPHIC TEE</h4>
-                            <span class="product-price">$95</span>
-                        </div>
-                        <p class="product-color">VINTAGE BLACK</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About/Brand Identity Section -->
-        <section class="about" id="about">
-            <div class="about-grid">
-                <div class="about-visual">
-                    <div class="abstract-shape">
-                        <h2 class="huge-gothic-text">Ghibor</h2>
-                    </div>
-                </div>
-                <div class="about-content">
-                    <h3 class="about-title">SOMETHING NEW.<br><span style="color: #b47446;">SOMETHING FABULOUS.</span></h3>
-                    <p class="about-desc">Ghibor represents the pinnacle of modern streetwear. Born from the convergence of gothic typography and high-fashion silhouettes, we forge identity through premium materials and bold, unapologetic design.</p>
-                    <p class="about-desc">Our garments are engineered for the energetic, designed to elevate the everyday uniform into a statement of pure, raw aesthetics.</p>
-                    <ul class="features-list">
-                        <li>✦ 100% Premium Heavyweight Cotton</li>
-                        <li>✦ Custom Pigment Wash</li>
-                        <li>✦ Boxy & Dropped Shoulder Fit</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-top">
-            <h1 class="footer-logo">Ghibor</h1>
-            <div class="footer-links-grid">
-                <div class="footer-col">
-                    <h4>SHOP</h4>
-                    <ul>
-                        <li><a href="#">T-Shirts</a></li>
-                        <li><a href="#">Hoodies</a></li>
-                        <li><a href="#">Accessories</a></li>
-                        <li><a href="#">Archive</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>SUPPORT</h4>
-                    <ul>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Shipping</a></li>
-                        <li><a href="#">Returns</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col newsletter">
-                    <h4>JOIN THE CULT</h4>
-                    <p>Subscribe for exclusive drops and early access.</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="EMAIL ADDRESS" required>
-                        <button type="submit">→</button>
-                    </form>
-                </div>
-            </div>
+        <div class="field" id="f-phone">
+          <label for="ph">Phone</label>
+          <input type="tel" id="ph" placeholder="+91 00000 00000" autocomplete="tel">
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 GHIBOR STUDIOS. ALL RIGHTS RESERVED.</p>
-            <div class="social-links">
-                <a href="#">IG</a>
-                <a href="#">TW</a>
-                <a href="#">TT</a>
-            </div>
-        </div>
-    </footer>
+      </div>
 
-    <!-- Scripts -->
-    <!-- GSAP Core & ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <!-- Lenis Smooth Scroll -->
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
-    
-    <script src="script.js"></script>
+      <div class="field" id="f-email">
+        <label for="em">Email</label>
+        <input type="email" id="em" placeholder="you@example.com" autocomplete="email">
+      </div>
+
+      <div class="field" id="f-msg">
+        <label for="msg">Why are you waiting for us?</label>
+        <textarea id="msg" placeholder="Tell us what you're expecting from Ghubor..."></textarea>
+      </div>
+
+      <button class="submit-btn" id="sb">Join the Cult →</button>
+      <p class="form-note" id="fn">Early access · 10% off your first order</p>
+      <p class="success" id="sc">You are in. See you on the other side.</p>
+
+    </div>
+
+  </div>
+
+  <p class="copy">© 2026 Ghubor</p>
+
+  <div class="mq" role="marquee">
+    <div class="mq-track">
+      <span>Register early · Get 10% off your first order · Ghubor · Early access only · Join the cult · Something is
+        coming ·</span>
+      <span>Register early · Get 10% off your first order · Ghubor · Early access only · Join the cult · Something is
+        coming ·</span>
+    </div>
+  </div>
+
+  <script>
+    // Grain — drawn once on oversized canvas, CSS shifts it for animation
+    (function () {
+      const c = document.getElementById('grain');
+      const ctx = c.getContext('2d');
+      const W = Math.ceil(window.innerWidth * 2.4);
+      const H = Math.ceil(window.innerHeight * 2.4);
+      c.width = W;
+      c.height = H;
+      c.style.cssText = [
+        'position:fixed', 'inset:0', 'width:200%', 'height:200%',
+        'top:-50%', 'left:-50%', 'pointer-events:none', 'z-index:80',
+        'opacity:0.04', 'animation:grain-shift 0.13s steps(1) infinite'
+      ].join(';');
+      const img = ctx.createImageData(W, H);
+      const d = img.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const v = (Math.random() * 255) | 0;
+        d[i] = d[i + 1] = d[i + 2] = v;
+        d[i + 3] = 255;
+      }
+      ctx.putImageData(img, 0, 0);
+    })();
+
+    // Blood drips
+    (function () {
+      const el = document.getElementById('drips');
+      const pos = [0, 16, 32, 50, 68, 84, 100];
+      pos.forEach(p => {
+        const d = document.createElement('div');
+        d.className = 'd';
+        const w = (2.5 + Math.random() * 3).toFixed(1);
+        const dur = (4.5 + Math.random() * 5.5).toFixed(2);
+        const del = -(Math.random() * 9).toFixed(2);
+        d.style.width = w + 'px';
+        d.style.animationDuration = dur + 's';
+        d.style.animationDelay = del + 's';
+        el.appendChild(d);
+      });
+    })();
+
+    // Form — submits to Formsubmit → sneezeconnect@gmail.com
+    (function () {
+      const sb = document.getElementById('sb');
+      const fn = document.getElementById('fn');
+      const sc = document.getElementById('sc');
+      const fw = document.getElementById('form-wrap');
+
+      const fields = [
+        { el: document.getElementById('f-name'), input: document.getElementById('nm'), validate: v => v.length > 0, hint: 'Enter your name' },
+        { el: document.getElementById('f-phone'), input: document.getElementById('ph'), validate: v => v.replace(/\D/g, '').length >= 7, hint: 'Enter a valid phone number' },
+        { el: document.getElementById('f-email'), input: document.getElementById('em'), validate: v => v.includes('@') && v.includes('.'), hint: 'Enter a valid email' },
+        { el: document.getElementById('f-msg'), input: document.getElementById('msg'), validate: v => v.length >= 10, hint: 'Write at least a sentence' },
+      ];
+
+      function shake(field) {
+        field.el.classList.add('err');
+        field.input.focus();
+        setTimeout(() => field.el.classList.remove('err'), 1500);
+      }
+
+      async function submit() {
+        // Validate
+        for (const f of fields) {
+          if (!f.validate(f.input.value.trim())) { shake(f); return; }
+        }
+
+        sb.disabled = true;
+        sb.textContent = 'Sending…';
+
+        const payload = {
+          name: document.getElementById('nm').value.trim(),
+          phone: document.getElementById('ph').value.trim(),
+          email: document.getElementById('em').value.trim(),
+          message: document.getElementById('msg').value.trim(),
+          _subject: 'New Ghubor Early Access Registration',
+          _template: 'table',
+          _captcha: 'false',
+        };
+
+        try {
+          const res = await fetch('https://formsubmit.co/ajax/sneezeconnect@gmail.com', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json();
+          if (data.success === 'true' || data.success === true) {
+            Array.from(fw.children).forEach(c => { if (c.id !== 'sc') c.style.display = 'none'; });
+            sc.style.display = 'block';
+          } else {
+            throw new Error('rejected');
+          }
+        } catch {
+          sb.disabled = false;
+          sb.textContent = 'Join the Cult →';
+          sc.textContent = 'Something went wrong. Try again.';
+          sc.style.color = 'rgba(180,60,60,0.8)';
+          sc.style.display = 'block';
+          setTimeout(() => { sc.style.display = 'none'; sc.textContent = 'You are in. See you on the other side.'; sc.style.color = ''; }, 3500);
+        }
+      }
+
+      sb.addEventListener('click', submit);
+    })();
+  </script>
 </body>
+
 </html>
