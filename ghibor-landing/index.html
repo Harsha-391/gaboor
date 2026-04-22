@@ -1,634 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GHUBOR</title>
-  <meta name="description" content="Ghubor — Something is coming.">
+  <meta name="description" content="Ghubor — For those who stopped chasing.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Inter:wght@300;400;700;900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;700&display=swap" rel="stylesheet">
   <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #080808;
-      --warm: #d8d0c3;
-      --dim: #3c3430;
-      --dim2: #5a5250;
-      --accent: #b84e10;
+      --bg:   #060504;
+      --bone: #d2ccbf;
+      --mid:  #9a9288;
+      --dim:  #5c5854;
+      --line: rgba(140,134,124,0.22);
     }
 
-    html,
+    html { scroll-behavior: smooth; }
     body {
       width: 100%;
-      height: 100%;
+      min-height: 100vh;
       background: var(--bg);
-      color: var(--warm);
+      color: var(--bone);
       font-family: 'Inter', sans-serif;
+      font-weight: 300;
       overflow-x: hidden;
-      overflow-y: auto;
     }
+
+    /* ── Scrollbar ──────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #2a2620; }
 
     /* ── Grain ──────────────────────────────────────────────────── */
     #grain {
-      position: fixed;
-      pointer-events: none;
-      z-index: 80;
-      opacity: 0.04;
-      animation: grain-shift 0.13s steps(1) infinite;
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 90;
+      opacity: 0.028;
+      animation: g 0.14s steps(1) infinite;
+    }
+    @keyframes g {
+       0%{ transform:translate(  0%,  0%) }  14%{ transform:translate(-5%,-7%) }
+      28%{ transform:translate(  8%,  4%) }  42%{ transform:translate(-5%, 9%) }
+      57%{ transform:translate(  4%, -5%) }  71%{ transform:translate(-9%, 6%) }
+      85%{ transform:translate(  6%, -9%) } 100%{ transform:translate(-4%, 5%) }
     }
 
-    @keyframes grain-shift {
-      0% {
-        transform: translate(0%, 0%);
-      }
-
-      14% {
-        transform: translate(-4%, -6%);
-      }
-
-      28% {
-        transform: translate(7%, 3%);
-      }
-
-      42% {
-        transform: translate(-6%, 8%);
-      }
-
-      57% {
-        transform: translate(3%, -4%);
-      }
-
-      71% {
-        transform: translate(-8%, 5%);
-      }
-
-      85% {
-        transform: translate(5%, -8%);
-      }
-
-      100% {
-        transform: translate(-3%, 4%);
-      }
+    /* ── Atmospheric centre glow ────────────────────────────────── */
+    .void-top {
+      position: fixed; top: 0; left: 0; right: 0; height: 50vh;
+      background: radial-gradient(ellipse 55% 70% at 50% -10%,
+        rgba(30,10,50,0.55) 0%, rgba(12,6,18,0.25) 50%, transparent 100%);
+      pointer-events: none; z-index: 1;
+    }
+    /* subtle centre spotlight so content lifts from the dark prints */
+    .void-center {
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse 44% 80% at 50% 42%,
+        rgba(8,6,5,0.55) 0%, transparent 70%);
+      pointer-events: none; z-index: 4;
     }
 
-    /* ── Atmospheric bleed ──────────────────────────────────────── */
-    .atm {
+    /* ── Print art panels ───────────────────────────────────────── */
+    .panel {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 55vh;
-      background: radial-gradient(ellipse 70% 90% at 50% 0%,
-          rgba(110, 8, 8, 0.22) 0%,
-          rgba(55, 0, 35, 0.10) 45%,
-          transparent 100%);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* ── T-shirt ghost overlays ─────────────────────────────────── */
-    .tee {
-      position: fixed;
+      top: 0; bottom: 0;
+      width: 34vw;
       pointer-events: none;
       z-index: 2;
-      filter: grayscale(1) brightness(2.5) contrast(0.72);
-      user-select: none;
-      -webkit-user-drag: none;
+      overflow: hidden;
     }
-
-    .tee.tl {
-      width: clamp(240px, 28vw, 480px);
-      top: -55px;
-      left: -40px;
-      opacity: 0.06;
-      transform: rotate(-15deg);
-    }
-
-    .tee.tr {
-      width: clamp(220px, 26vw, 440px);
-      top: 30px;
-      right: -65px;
-      opacity: 0.05;
-      transform: rotate(12deg);
-    }
-
-    .tee.bc {
-      width: clamp(200px, 22vw, 360px);
-      bottom: -85px;
-      left: 50%;
-      opacity: 0.036;
-      transform: translateX(-50%) rotate(-4deg);
-    }
-
-    /* ── Bats ───────────────────────────────────────────────────── */
-    .bat {
-      position: fixed;
-      pointer-events: none;
-      z-index: 4;
-      opacity: 0.16;
-    }
-
-    .bat svg {
-      width: 100%;
-      height: 100%;
+    .panel img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: invert(1);
+      opacity: 0.42;
       display: block;
     }
 
-    .bwl {
-      animation: bflap 0.44s ease-in-out infinite alternate;
-      transform-origin: 50% 60%;
+    /* left panel fades to the right, right panel fades to the left */
+    .panel.left {
+      left: 0;
+      -webkit-mask-image: linear-gradient(to right, black 0%, black 38%, transparent 100%);
+              mask-image: linear-gradient(to right, black 0%, black 38%, transparent 100%);
+      animation: breathe-l 14s ease-in-out infinite;
+    }
+    .panel.right {
+      right: 0;
+      -webkit-mask-image: linear-gradient(to left, black 0%, black 38%, transparent 100%);
+              mask-image: linear-gradient(to left, black 0%, black 38%, transparent 100%);
+      animation: breathe-r 17s ease-in-out infinite;
+    }
+    @keyframes breathe-l {
+      0%,100% { transform: scale(1)     translateY(0px); }
+      50%      { transform: scale(1.018) translateY(-10px); }
+    }
+    @keyframes breathe-r {
+      0%,100% { transform: scale(1)     translateY(-8px); }
+      50%      { transform: scale(1.014) translateY(4px); }
     }
 
-    .bwr {
-      animation: bflap 0.44s ease-in-out infinite alternate-reverse;
-      transform-origin: 50% 60%;
+    /* bottom print strip (01 v2 - the life quote) */
+    .panel-strip {
+      position: fixed;
+      bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      width: clamp(160px, 18vw, 260px);
+      pointer-events: none; z-index: 2;
+      opacity: 0.14;
+      filter: invert(1);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+              mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
     }
 
-    @keyframes bflap {
-      from {
-        transform: scaleY(1)
-      }
-
-      to {
-        transform: scaleY(0.25)
-      }
-    }
-
-    .bat.b1 {
-      width: 36px;
-      height: 15px;
-      top: 13%;
-      left: 5%;
-      animation: bfly1 30s linear infinite;
-    }
-
-    .bat.b2 {
-      width: 26px;
-      height: 11px;
-      top: 25%;
-      right: 9%;
-      animation: bfly2 42s linear infinite;
-      animation-delay: -16s;
-    }
-
-    .bat.b3 {
-      width: 20px;
-      height: 8px;
-      top: 8%;
-      right: 22%;
-      animation: bfly1 52s linear infinite;
-      animation-delay: -26s;
-    }
-
-    @keyframes bfly1 {
-      0% {
-        transform: translateX(-120px);
-      }
-
-      100% {
-        transform: translateX(110vw);
-      }
-    }
-
-    @keyframes bfly2 {
-      0% {
-        transform: translateX(120px) scaleX(-1);
-      }
-
-      100% {
-        transform: translateX(-110vw) scaleX(-1);
-      }
-    }
+    /* ── Bats ───────────────────────────────────────────────────── */
+    .bat { position: fixed; pointer-events: none; z-index: 5; opacity: 0.14; }
+    .bat svg { width: 100%; height: 100%; display: block; }
+    .bwl { animation: bf .5s ease-in-out infinite alternate;         transform-origin: 50% 60%; }
+    .bwr { animation: bf .5s ease-in-out infinite alternate-reverse; transform-origin: 50% 60%; }
+    @keyframes bf { from { transform: scaleY(1) } to { transform: scaleY(0.2) } }
+    .bat.b1 { width:30px; height:12px; top:11%; left: 5%; animation: fl1 36s linear infinite; }
+    .bat.b2 { width:20px; height: 8px; top:20%; right:7%; animation: fl2 50s linear infinite; animation-delay:-22s; }
+    @keyframes fl1 { from{ transform:translateX(-80px) }    to{ transform:translateX(108vw) } }
+    @keyframes fl2 { from{ transform:translateX(80px) scaleX(-1) } to{ transform:translateX(-108vw) scaleX(-1) } }
 
     /* ── Nav ────────────────────────────────────────────────────── */
     nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 58px;
-      padding: 0 36px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: fixed; top: 0; left: 0; right: 0;
+      padding: 26px 36px;
+      display: flex; align-items: center; justify-content: space-between;
       z-index: 20;
     }
-
-    .nav-logo {
-      font-family: 'UnifrakturMaguntia', serif;
-      font-size: 21px;
-      color: var(--warm);
-      opacity: 0.45;
+    .nav-l { font-size: 8px; font-weight: 400; letter-spacing: 0.5em; text-transform: uppercase; color: var(--dim); }
+    .nav-r { display: flex; gap: 22px; }
+    .nav-r a {
+      font-size: 8px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--dim); text-decoration: none; transition: color 0.3s;
     }
-
-    .nav-links {
-      display: flex;
-      gap: 22px;
-    }
-
-    .nav-links a {
-      font-size: 8.5px;
-      font-weight: 700;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--dim2);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--warm);
-    }
+    .nav-r a:hover { color: var(--bone); }
 
     /* ── Page ───────────────────────────────────────────────────── */
     .page {
-      position: relative;
-      z-index: 10;
+      position: relative; z-index: 10;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 24px 90px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 100px 32px 90px;
+    }
+
+    /* ── Logo ───────────────────────────────────────────────────── */
+    .logo-img {
+      width: clamp(260px, 40vw, 600px);
+      height: auto; display: block;
+      opacity: 0;
+      animation: arise 2.6s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+      /* subtle glow so it lifts from dark prints */
+      filter: drop-shadow(0 0 40px rgba(255,255,255,0.06)) drop-shadow(0 0 80px rgba(255,255,255,0.03));
+    }
+
+    /* ── Tagline under logo ─────────────────────────────────────── */
+    .brand-line {
+      font-size: 8.5px; font-weight: 300;
+      letter-spacing: 0.62em; text-transform: uppercase;
+      color: var(--dim); margin-top: 22px;
+      opacity: 0;
+      animation: arise 2s cubic-bezier(0.16,1,0.3,1) 1s forwards;
+    }
+
+    /* ── Vertical rule ──────────────────────────────────────────── */
+    .v-rule {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, transparent, var(--line), transparent);
+      margin: 40px 0;
+      opacity: 0;
+      animation: arise 2s cubic-bezier(0.16,1,0.3,1) 1.3s forwards;
+    }
+
+    /* ── Below content ──────────────────────────────────────────── */
+    .below {
+      width: 100%; max-width: 440px;
+      display: flex; flex-direction: column; align-items: center;
+      opacity: 0;
+      animation: arise 2s cubic-bezier(0.16,1,0.3,1) 1.6s forwards;
     }
 
     /* ── Tag ────────────────────────────────────────────────────── */
     .tag {
-      font-size: 8px;
-      letter-spacing: 0.8em;
-      text-transform: uppercase;
-      color: var(--dim2);
-      margin-bottom: 22px;
-    }
-
-    /* ── Logo ───────────────────────────────────────────────────── */
-    .logo-wrap {
-      position: relative;
-      margin-bottom: 36px;
-    }
-
-    .logo {
-      font-family: 'UnifrakturMaguntia', serif;
-      font-size: clamp(66px, 13.5vw, 172px);
-      line-height: 0.88;
-      color: var(--warm);
-      text-align: center;
-      text-shadow:
-        0 0 5px rgba(184, 78, 16, 0.08),
-        0 0 28px rgba(110, 8, 8, 0.06);
-      display: block;
-    }
-
-    /* Blood drips */
-    .drips {
-      position: absolute;
-      bottom: -1px;
-      left: 12%;
-      right: 12%;
-      height: 50px;
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-start;
-      pointer-events: none;
-    }
-
-    .d {
-      border-radius: 0 0 50% 50%;
-      background: linear-gradient(to bottom, #5c0000, #991010);
-      animation: dfall linear infinite;
-      opacity: 0;
-    }
-
-    @keyframes dfall {
-      0% {
-        height: 0;
-        opacity: 0;
-      }
-
-      8% {
-        opacity: 0.65;
-      }
-
-      78% {
-        height: 42px;
-        opacity: 0.50;
-      }
-
-      95% {
-        opacity: 0;
-      }
-
-      100% {
-        height: 50px;
-        opacity: 0;
-      }
-    }
-
-    /* ── Divider ────────────────────────────────────────────────── */
-    .rule {
-      width: 1px;
-      height: 42px;
-      background: linear-gradient(to bottom, transparent, var(--dim), transparent);
-      margin-bottom: 26px;
-    }
-
-    /* ── Tagline ────────────────────────────────────────────────── */
-    .tagline {
-      font-size: 9px;
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      color: var(--dim2);
-      margin-bottom: 40px;
+      font-size: 7.5px; font-weight: 300;
+      letter-spacing: 0.68em; text-transform: uppercase;
+      color: var(--mid); margin-bottom: 36px; text-align: center;
     }
 
     /* ── Form ───────────────────────────────────────────────────── */
-    .form-wrap {
-      width: 100%;
-      max-width: 440px;
-    }
+    .form-wrap { width: 100%; }
 
-    .field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .field {
-      margin-bottom: 22px;
-    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+    .field { margin-bottom: 30px; }
 
     .field label {
-      display: block;
-      font-size: 8px;
-      font-weight: 600;
-      letter-spacing: 0.45em;
-      text-transform: uppercase;
-      color: #908880;
-      margin-bottom: 8px;
+      display: block; font-size: 8px; font-weight: 400;
+      letter-spacing: 0.5em; text-transform: uppercase;
+      color: var(--mid); margin-bottom: 10px;
     }
+    .field input, .field textarea {
+      width: 100%; background: none; border: none;
+      border-bottom: 1px solid #2e2c28;
+      outline: none; padding: 8px 0 12px;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 300;
+      letter-spacing: 0.06em; color: var(--bone);
+      transition: border-color 0.4s; caret-color: var(--bone);
+    }
+    .field input:focus, .field textarea:focus { border-color: #5c5854; }
+    .field input::placeholder, .field textarea::placeholder {
+      color: #3e3c38; font-style: italic; letter-spacing: 0.04em;
+    }
+    .field textarea { resize: none; height: 78px; line-height: 1.85; }
+    .field.err input, .field.err textarea { border-color: rgba(110,28,28,0.8); }
 
-    .field input,
-    .field textarea {
-      width: 100%;
-      background: none;
-      border: none;
-      border-bottom: 1px solid #4a4440;
-      outline: none;
-      padding: 8px 0 11px;
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      color: var(--warm);
-      transition: border-color 0.3s;
-    }
-
-    .field input:focus,
-    .field textarea:focus {
-      border-color: rgba(216, 208, 195, 0.5);
-    }
-
-    .field input::placeholder,
-    .field textarea::placeholder {
-      color: #5e5856;
-      letter-spacing: 0.1em;
-    }
-
-    .field textarea {
-      resize: none;
-      height: 70px;
-      line-height: 1.7;
-    }
-
-    .field.err input,
-    .field.err textarea {
-      border-color: rgba(139, 0, 0, 0.65);
-    }
+    .sep { width: 100%; height: 1px; background: var(--line); margin: 6px 0 28px; }
 
     .submit-btn {
-      width: 100%;
-      background: none;
-      border: 1px solid #4a4440;
-      padding: 14px 0;
-      font-family: 'Inter', sans-serif;
-      font-size: 8.5px;
-      font-weight: 700;
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      color: var(--warm);
-      cursor: pointer;
-      transition: border-color 0.3s, background 0.3s;
-      margin-top: 6px;
+      width: 100%; background: none; border: 1px solid #2e2c28;
+      padding: 15px 0;
+      font-family: 'Inter', sans-serif; font-size: 8px; font-weight: 700;
+      letter-spacing: 0.55em; text-transform: uppercase;
+      color: var(--mid); cursor: pointer;
+      transition: border-color 0.4s, color 0.4s;
     }
-
-    .submit-btn:hover {
-      border-color: var(--warm);
-      background: rgba(216, 208, 195, 0.04);
-    }
-
-    .submit-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+    .submit-btn:hover { border-color: var(--mid); color: var(--bone); }
+    .submit-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
     .form-note {
-      font-size: 8px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #706868;
-      text-align: center;
-      margin-top: 12px;
+      font-size: 7.5px; font-weight: 300; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--dim);
+      text-align: center; margin-top: 14px;
     }
-
     .success {
-      display: none;
-      font-size: 8.5px;
-      letter-spacing: 0.42em;
-      text-transform: uppercase;
-      color: var(--accent);
-      text-align: center;
-      padding: 12px 0;
+      display: none; font-size: 8.5px; font-weight: 300;
+      letter-spacing: 0.44em; text-transform: uppercase;
+      color: var(--mid); text-align: center;
+      padding: 18px 0 4px; line-height: 2.2;
     }
 
-    /* ── Socials / copy ─────────────────────────────────────────── */
-    .socials {
-      position: fixed;
-      bottom: 52px;
-      left: 36px;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      z-index: 20;
+    /* ── Footer strip ───────────────────────────────────────────── */
+    .footer-strip {
+      position: fixed; bottom: 36px; left: 0; right: 0;
+      padding: 0 36px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 20; pointer-events: none;
     }
-
-    .socials a {
-      font-size: 7.5px;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--dim);
-      text-decoration: none;
-      transition: color 0.2s;
+    .footer-strip span, .footer-strip a {
+      font-size: 7px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--dim); text-decoration: none; pointer-events: all;
     }
-
-    .socials a:hover {
-      color: var(--warm);
-    }
-
-    .copy {
-      position: fixed;
-      bottom: 52px;
-      right: 36px;
-      font-size: 7.5px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--dim);
-      z-index: 20;
-    }
+    .footer-strip a:hover { color: var(--bone); }
 
     /* ── Marquee ────────────────────────────────────────────────── */
     .mq {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 36px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      border-top: 1px solid rgba(184, 78, 16, 0.22);
-      background: rgba(8, 8, 8, 0.96);
+      position: fixed; bottom: 0; left: 0; right: 0; height: 32px;
+      overflow: hidden; display: flex; align-items: center;
+      border-top: 1px solid var(--line); background: rgba(6,5,4,0.98);
       z-index: 30;
     }
-
-    .mq-track {
-      display: flex;
-      white-space: nowrap;
-      animation: mq-run 38s linear infinite;
-    }
-
+    .mq-track { display: flex; white-space: nowrap; animation: mq 48s linear infinite; }
     .mq-track span {
-      font-size: 8px;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent);
-      padding-right: 80px;
+      font-size: 7px; font-weight: 700; letter-spacing: 0.38em; text-transform: uppercase;
+      color: #4a4640; padding-right: 90px;
+    }
+    .mq-track span em { font-style: normal; color: #7a6040; }
+    @keyframes mq { from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
+
+    /* ── Shared entrance animation ──────────────────────────────── */
+    @keyframes arise {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes mq-run {
-      from {
-        transform: translateX(0);
-      }
-
-      to {
-        transform: translateX(-50%);
-      }
+    /* ── Mobile ─────────────────────────────────────────────────── */
+    @media (max-width: 680px) {
+      .panel { width: 46vw; }
+      .panel img { opacity: 0.28; }
+      nav { padding: 22px 20px; }
+      .field-row { grid-template-columns: 1fr; gap: 0; }
+      .footer-strip { display: none; }
+      .logo-img { width: clamp(220px, 76vw, 380px); }
     }
-
-    /* ── Responsive ─────────────────────────────────────────────── */
-    @media (max-width: 500px) {
-      nav {
-        padding: 0 20px;
-      }
-
-      .socials,
-      .copy {
-        display: none;
-      }
-
-      .field-row {
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
+    @media (max-width: 400px) {
+      .panel { display: none; }
     }
   </style>
 </head>
-
 <body>
 
-  <canvas id="grain"></canvas>
-  <div class="atm"></div>
+<canvas id="grain"></canvas>
+<div class="void-top"></div>
+<div class="void-center"></div>
 
-  <!-- T-shirt ghost teasers -->
-  <img class="tee tl" src="assets/brown_tee.png" alt="" draggable="false">
-  <img class="tee tr" src="assets/green_tee.png" alt="" draggable="false">
-  <img class="tee bc" src="assets/black_tee.png" alt="" draggable="false">
+<!-- Art print panels — The Dreaded One (left) · Ascension (right) -->
+<div class="panel left">
+  <img src="assets/03 Full New.png" alt="" draggable="false">
+</div>
+<div class="panel right">
+  <img src="assets/05 full.png" alt="" draggable="false">
+</div>
 
-  <!-- Bats -->
-  <div class="bat b1" aria-hidden="true">
-    <svg viewBox="0 0 80 32">
-      <ellipse cx="40" cy="20" rx="4.5" ry="6.5" fill="#d8d0c3" />
-      <ellipse cx="40" cy="15" rx="3.5" ry="4.5" fill="#d8d0c3" />
-      <path d="M36,13L34,6L38,12ZM44,13L46,6L42,12Z" fill="#d8d0c3" />
-      <path class="bwl" d="M35,17C30,9 14,3 2,13C7,12 13,11 17,17C12,17 10,23 14,26C18,22 26,18 35,18Z"
-        fill="#d8d0c3" />
-      <path class="bwr" d="M45,17C50,9 66,3 78,13C73,12 67,11 63,17C68,17 70,23 66,26C62,22 54,18 45,18Z"
-        fill="#d8d0c3" />
-    </svg>
+<!-- Centre bottom: life quote print -->
+<img class="panel-strip" src="assets/01 v2 full.png" alt="" draggable="false">
+
+<!-- Bats -->
+<div class="bat b1" aria-hidden="true">
+  <svg viewBox="0 0 80 32"><ellipse cx="40" cy="20" rx="4.5" ry="6.5" fill="#d2ccbf"/><ellipse cx="40" cy="15" rx="3.5" ry="4.5" fill="#d2ccbf"/><path d="M36,13L34,6L38,12ZM44,13L46,6L42,12Z" fill="#d2ccbf"/><path class="bwl" d="M35,17C30,9 14,3 2,13C7,12 13,11 17,17C12,17 10,23 14,26C18,22 26,18 35,18Z" fill="#d2ccbf"/><path class="bwr" d="M45,17C50,9 66,3 78,13C73,12 67,11 63,17C68,17 70,23 66,26C62,22 54,18 45,18Z" fill="#d2ccbf"/></svg>
+</div>
+<div class="bat b2" aria-hidden="true">
+  <svg viewBox="0 0 80 32"><ellipse cx="40" cy="20" rx="4.5" ry="6.5" fill="#d2ccbf"/><ellipse cx="40" cy="15" rx="3.5" ry="4.5" fill="#d2ccbf"/><path d="M36,13L34,6L38,12ZM44,13L46,6L42,12Z" fill="#d2ccbf"/><path class="bwl" d="M35,17C30,9 14,3 2,13C7,12 13,11 17,17C12,17 10,23 14,26C18,22 26,18 35,18Z" fill="#d2ccbf"/><path class="bwr" d="M45,17C50,9 66,3 78,13C73,12 67,11 63,17C68,17 70,23 66,26C62,22 54,18 45,18Z" fill="#d2ccbf"/></svg>
+</div>
+
+<!-- Nav -->
+<nav>
+  <span class="nav-l">SS · 26</span>
+  <div class="nav-r">
+    <a href="#">IG</a>
+    <a href="#">TK</a>
+    <a href="#">TT</a>
   </div>
-  <div class="bat b2" aria-hidden="true">
-    <svg viewBox="0 0 80 32">
-      <ellipse cx="40" cy="20" rx="4.5" ry="6.5" fill="#d8d0c3" />
-      <ellipse cx="40" cy="15" rx="3.5" ry="4.5" fill="#d8d0c3" />
-      <path d="M36,13L34,6L38,12ZM44,13L46,6L42,12Z" fill="#d8d0c3" />
-      <path class="bwl" d="M35,17C30,9 14,3 2,13C7,12 13,11 17,17C12,17 10,23 14,26C18,22 26,18 35,18Z"
-        fill="#d8d0c3" />
-      <path class="bwr" d="M45,17C50,9 66,3 78,13C73,12 67,11 63,17C68,17 70,23 66,26C62,22 54,18 45,18Z"
-        fill="#d8d0c3" />
-    </svg>
-  </div>
-  <div class="bat b3" aria-hidden="true">
-    <svg viewBox="0 0 80 32">
-      <ellipse cx="40" cy="20" rx="4.5" ry="6.5" fill="#d8d0c3" />
-      <ellipse cx="40" cy="15" rx="3.5" ry="4.5" fill="#d8d0c3" />
-      <path d="M36,13L34,6L38,12ZM44,13L46,6L42,12Z" fill="#d8d0c3" />
-      <path class="bwl" d="M35,17C30,9 14,3 2,13C7,12 13,11 17,17C12,17 10,23 14,26C18,22 26,18 35,18Z"
-        fill="#d8d0c3" />
-      <path class="bwr" d="M45,17C50,9 66,3 78,13C73,12 67,11 63,17C68,17 70,23 66,26C62,22 54,18 45,18Z"
-        fill="#d8d0c3" />
-    </svg>
-  </div>
+</nav>
 
-  <!-- Nav -->
-  <nav>
-    <span class="nav-logo">Ghubor</span>
-    <div class="nav-links">
-      <a href="#">IG</a>
-      <a href="#">TK</a>
-      <a href="#">TT</a>
-    </div>
-  </nav>
+<!-- Content -->
+<div class="page">
 
-  <!-- Content -->
-  <div class="page">
+  <img class="logo-img" src="assets/Ghubor.png" alt="Ghubor">
+  <p class="brand-line">For those who stopped chasing</p>
 
-    <p class="tag">— Coming Soon —</p>
+  <div class="v-rule"></div>
 
-    <div class="logo-wrap">
-      <span class="logo" aria-label="Ghubor">Ghubor</span>
-      <div class="drips" id="drips" aria-hidden="true"></div>
-    </div>
+  <div class="below">
+    <p class="tag">early access</p>
 
-    <div class="rule"></div>
-    <p class="tagline">Streetwear for the chosen few</p>
-
-    <div class="form-wrap" id="form-wrap">
+    <div class="form-wrap" id="fw">
 
       <div class="field-row">
         <div class="field" id="f-name">
           <label for="nm">Name</label>
-          <input type="text" id="nm" placeholder="Full name" autocomplete="name">
+          <input type="text" id="nm" placeholder="full name" autocomplete="name">
         </div>
         <div class="field" id="f-phone">
           <label for="ph">Phone</label>
@@ -642,135 +358,96 @@
       </div>
 
       <div class="field" id="f-msg">
-        <label for="msg">Why are you waiting for us?</label>
-        <textarea id="msg" placeholder="Tell us what you're expecting from Ghubor..."></textarea>
+        <label for="msg">What are you expecting from us?</label>
+        <textarea id="msg" placeholder="tell us what drew you here..."></textarea>
       </div>
 
-      <button class="submit-btn" id="sb">Join the Cult →</button>
-      <p class="form-note" id="fn">Early access · 10% off your first order</p>
-      <p class="success" id="sc">You are in. See you on the other side.</p>
+      <div class="sep"></div>
+
+      <button class="submit-btn" id="sb">Request Early Access</button>
+      <p class="form-note" id="fn">First registrants receive 10% off at launch</p>
+      <p class="success" id="sc">You are in.<br>We will find you when the time comes.</p>
 
     </div>
-
   </div>
+</div>
 
-  <p class="copy">© 2026 Ghubor</p>
+<!-- Footer -->
+<div class="footer-strip">
+  <span>© 2026 Ghubor</span>
+  <a href="#">Instagram</a>
+</div>
 
-  <div class="mq" role="marquee">
-    <div class="mq-track">
-      <span>Register early · Get 10% off your first order · Ghubor · Early access only · Join the cult · Something is
-        coming ·</span>
-      <span>Register early · Get 10% off your first order · Ghubor · Early access only · Join the cult · Something is
-        coming ·</span>
-    </div>
+<!-- Marquee -->
+<div class="mq">
+  <div class="mq-track">
+    <span>Register early <em>·</em> Get <em>10% off</em> your first order <em>·</em> Ghubor <em>·</em> SS26 <em>·</em> For those who stopped chasing <em>·</em> Early access only <em>·</em></span>
+    <span>Register early <em>·</em> Get <em>10% off</em> your first order <em>·</em> Ghubor <em>·</em> SS26 <em>·</em> For those who stopped chasing <em>·</em> Early access only <em>·</em></span>
   </div>
+</div>
 
-  <script>
-    // Grain — drawn once on oversized canvas, CSS shifts it for animation
-    (function () {
-      const c = document.getElementById('grain');
-      const ctx = c.getContext('2d');
-      const W = Math.ceil(window.innerWidth * 2.4);
-      const H = Math.ceil(window.innerHeight * 2.4);
-      c.width = W;
-      c.height = H;
-      c.style.cssText = [
-        'position:fixed', 'inset:0', 'width:200%', 'height:200%',
-        'top:-50%', 'left:-50%', 'pointer-events:none', 'z-index:80',
-        'opacity:0.04', 'animation:grain-shift 0.13s steps(1) infinite'
-      ].join(';');
-      const img = ctx.createImageData(W, H);
-      const d = img.data;
-      for (let i = 0; i < d.length; i += 4) {
-        const v = (Math.random() * 255) | 0;
-        d[i] = d[i + 1] = d[i + 2] = v;
-        d[i + 3] = 255;
-      }
-      ctx.putImageData(img, 0, 0);
-    })();
+<script>
+// Grain
+(function(){
+  const c=document.getElementById('grain'), ctx=c.getContext('2d');
+  const W=Math.ceil(window.innerWidth*2.6), H=Math.ceil(window.innerHeight*2.6);
+  c.width=W; c.height=H;
+  c.style.cssText='position:fixed;inset:0;width:200%;height:200%;top:-50%;left:-50%;pointer-events:none;z-index:90;opacity:0.028;animation:g 0.14s steps(1) infinite';
+  const img=ctx.createImageData(W,H), d=img.data;
+  for(let i=0;i<d.length;i+=4){ const v=(Math.random()*255)|0; d[i]=d[i+1]=d[i+2]=v; d[i+3]=255; }
+  ctx.putImageData(img,0,0);
+})();
 
-    // Blood drips
-    (function () {
-      const el = document.getElementById('drips');
-      const pos = [0, 16, 32, 50, 68, 84, 100];
-      pos.forEach(p => {
-        const d = document.createElement('div');
-        d.className = 'd';
-        const w = (2.5 + Math.random() * 3).toFixed(1);
-        const dur = (4.5 + Math.random() * 5.5).toFixed(2);
-        const del = -(Math.random() * 9).toFixed(2);
-        d.style.width = w + 'px';
-        d.style.animationDuration = dur + 's';
-        d.style.animationDelay = del + 's';
-        el.appendChild(d);
+// Form → sneezeconnect@gmail.com via Formsubmit
+(function(){
+  const sb=document.getElementById('sb');
+  const fn=document.getElementById('fn');
+  const sc=document.getElementById('sc');
+  const fw=document.getElementById('fw');
+
+  const fields=[
+    {el:document.getElementById('f-name'), inp:document.getElementById('nm'),  ok:v=>v.length>1},
+    {el:document.getElementById('f-phone'),inp:document.getElementById('ph'),  ok:v=>v.replace(/\D/g,'').length>=7},
+    {el:document.getElementById('f-email'),inp:document.getElementById('em'),  ok:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},
+    {el:document.getElementById('f-msg'), inp:document.getElementById('msg'), ok:v=>v.length>=10},
+  ];
+
+  function shake(f){
+    f.el.classList.add('err'); f.inp.focus();
+    setTimeout(()=>f.el.classList.remove('err'),1600);
+  }
+
+  async function submit(){
+    for(const f of fields){ if(!f.ok(f.inp.value.trim())){ shake(f); return; } }
+    sb.disabled=true; sb.textContent='Sending…';
+    try{
+      const r=await fetch('https://formsubmit.co/ajax/sneezeconnect@gmail.com',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({
+          name:   document.getElementById('nm').value.trim(),
+          phone:  document.getElementById('ph').value.trim(),
+          email:  document.getElementById('em').value.trim(),
+          message:document.getElementById('msg').value.trim(),
+          _subject:'Ghubor — Early Access Registration',
+          _template:'table', _captcha:'false'
+        })
       });
-    })();
+      const data=await r.json();
+      if(data.success==='true'||data.success===true){
+        Array.from(fw.children).forEach(c=>{ if(c.id!=='sc') c.style.display='none'; });
+        sc.style.display='block';
+      } else throw 0;
+    } catch{
+      sb.disabled=false; sb.textContent='Request Early Access';
+      const prev=sc.textContent; sc.textContent='Something went wrong. Try again.';
+      sc.style.color='rgba(150,50,50,0.75)'; sc.style.display='block';
+      setTimeout(()=>{ sc.style.display='none'; sc.textContent=prev; sc.style.color=''; },3200);
+    }
+  }
 
-    // Form — submits to Formsubmit → sneezeconnect@gmail.com
-    (function () {
-      const sb = document.getElementById('sb');
-      const fn = document.getElementById('fn');
-      const sc = document.getElementById('sc');
-      const fw = document.getElementById('form-wrap');
-
-      const fields = [
-        { el: document.getElementById('f-name'), input: document.getElementById('nm'), validate: v => v.length > 0, hint: 'Enter your name' },
-        { el: document.getElementById('f-phone'), input: document.getElementById('ph'), validate: v => v.replace(/\D/g, '').length >= 7, hint: 'Enter a valid phone number' },
-        { el: document.getElementById('f-email'), input: document.getElementById('em'), validate: v => v.includes('@') && v.includes('.'), hint: 'Enter a valid email' },
-        { el: document.getElementById('f-msg'), input: document.getElementById('msg'), validate: v => v.length >= 10, hint: 'Write at least a sentence' },
-      ];
-
-      function shake(field) {
-        field.el.classList.add('err');
-        field.input.focus();
-        setTimeout(() => field.el.classList.remove('err'), 1500);
-      }
-
-      async function submit() {
-        // Validate
-        for (const f of fields) {
-          if (!f.validate(f.input.value.trim())) { shake(f); return; }
-        }
-
-        sb.disabled = true;
-        sb.textContent = 'Sending…';
-
-        const payload = {
-          name: document.getElementById('nm').value.trim(),
-          phone: document.getElementById('ph').value.trim(),
-          email: document.getElementById('em').value.trim(),
-          message: document.getElementById('msg').value.trim(),
-          _subject: 'New Ghubor Early Access Registration',
-          _template: 'table',
-          _captcha: 'false',
-        };
-
-        try {
-          const res = await fetch('https://formsubmit.co/ajax/sneezeconnect@gmail.com', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify(payload),
-          });
-          const data = await res.json();
-          if (data.success === 'true' || data.success === true) {
-            Array.from(fw.children).forEach(c => { if (c.id !== 'sc') c.style.display = 'none'; });
-            sc.style.display = 'block';
-          } else {
-            throw new Error('rejected');
-          }
-        } catch {
-          sb.disabled = false;
-          sb.textContent = 'Join the Cult →';
-          sc.textContent = 'Something went wrong. Try again.';
-          sc.style.color = 'rgba(180,60,60,0.8)';
-          sc.style.display = 'block';
-          setTimeout(() => { sc.style.display = 'none'; sc.textContent = 'You are in. See you on the other side.'; sc.style.color = ''; }, 3500);
-        }
-      }
-
-      sb.addEventListener('click', submit);
-    })();
-  </script>
+  sb.addEventListener('click', submit);
+})();
+</script>
 </body>
-
 </html>

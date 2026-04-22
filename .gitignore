@@ -1,0 +1,12 @@
+# Design source files — too large for GitHub
+*.psd
+*.ai
+*.fig
+
+# Large raw print files (use the "full" versions for web)
+ghibor-landing/assets/01.png
+ghibor-landing/assets/01v2.png
+ghibor-landing/assets/02.png
+ghibor-landing/assets/03.png
+ghibor-landing/assets/04.png
+ghibor-landing/assets/05.png
