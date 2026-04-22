@@ -1,6 +1,9 @@
 # PHPMailer — upload to server manually, not via git
 ghibor-landing/PHPMailer/
 
+# Mailer — contains Gmail credentials, never commit
+ghibor-landing/send.php
+
 # Design source files — too large for GitHub
 *.psd
 *.ai
