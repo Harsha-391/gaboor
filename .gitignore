@@ -1,9 +1,14 @@
-# PHPMailer — upload to server manually, not via git
-ghibor-landing/PHPMailer/
+# Next.js build output & dependencies
+.next/
+node_modules/
 
-# PHP mailer (replaced by Vercel serverless function)
-ghibor-landing/send.php
+# Environment variables — never commit
+.env.local
+.env*.local
+
+# PHP mailer (replaced by Next.js + EmailJS)
 ghibor-landing/PHPMailer/
+ghibor-landing/send.php
 
 # Design source files — too large for GitHub
 *.psd
