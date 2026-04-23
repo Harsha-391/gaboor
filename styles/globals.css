@@ -90,6 +90,7 @@ body {
   position: fixed; bottom: 36px; left: 50%;
   transform: translateX(-50%);
   width: clamp(160px, 18vw, 260px);
+  height: clamp(200px, 24vw, 360px);
   pointer-events: none; z-index: 2;
   opacity: 0.14; filter: invert(1);
   -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
@@ -137,8 +138,8 @@ nav {
 
 /* ── Logo ─────────────────────────────────────────────────── */
 .logo-img {
-  width: clamp(260px, 40vw, 600px);
-  height: auto; display: block;
+  width: clamp(260px, 40vw, 600px) !important;
+  height: auto !important; display: block;
   opacity: 0;
   animation: arise 2.6s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
   filter: drop-shadow(0 0 40px rgba(255,255,255,0.06)) drop-shadow(0 0 80px rgba(255,255,255,0.03));

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 import emailjs from '@emailjs/browser';
 
 const BAT_SVG = (
@@ -100,15 +101,14 @@ export default function Home() {
 
       {/* Print art panels */}
       <div className="panel left" aria-hidden="true">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/03 Full New.png" alt="" draggable={false} />
+        <Image src="/assets/03 Full New.png" alt="" fill sizes="34vw" style={{ objectFit:'cover', objectPosition:'center top' }} draggable={false} />
       </div>
       <div className="panel right" aria-hidden="true">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/05 full.png" alt="" draggable={false} />
+        <Image src="/assets/05 full.png" alt="" fill sizes="34vw" style={{ objectFit:'cover', objectPosition:'center top' }} draggable={false} />
       </div>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="panel-strip" src="/assets/01 v2 full.png" alt="" draggable={false} aria-hidden="true" />
+      <div className="panel-strip" aria-hidden="true">
+        <Image src="/assets/01 v2 full.png" alt="" fill sizes="18vw" style={{ objectFit:'contain' }} draggable={false} />
+      </div>
 
       {/* Bats */}
       <div className="bat b1" aria-hidden="true">{BAT_SVG}</div>
@@ -127,8 +127,7 @@ export default function Home() {
       {/* Main */}
       <main className="page">
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="logo-img" src="/assets/Ghubor.png" alt="Ghubor" />
+        <Image className="logo-img" src="/assets/Ghubor.png" alt="Ghubor" width={600} height={160} priority />
         <p className="brand-line">For those who stopped chasing</p>
 
         <div className="v-rule" />
