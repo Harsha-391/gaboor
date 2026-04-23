@@ -16,7 +16,11 @@ export default function Home() {
   const grainRef = useRef(null);
   const [form, setForm]     = useState({ name: '', phone: '', email: '', message: '' });
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState('idle'); // idle | sending | success | error
+  const [status, setStatus] = useState('idle');
+
+  useEffect(() => {
+    emailjs.init({ publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY });
+  }, []);
 
   // Draw grain noise once on mount
   useEffect(() => {
@@ -69,7 +73,7 @@ export default function Home() {
           from_email: form.email.trim(),
           message:    form.message.trim(),
         },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }
       );
       setStatus('success');
     } catch (err) {
@@ -85,12 +89,6 @@ export default function Home() {
         <title>GHUBOR</title>
         <meta name="description" content="Ghubor — For those who stopped chasing." />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;700&display=swap"
-          rel="stylesheet"
-        />
       </Head>
 
       {/* Grain */}
@@ -153,6 +151,7 @@ export default function Home() {
                     autoComplete="name" value={form.name}
                     onChange={handleChange('name')}
                   />
+                  {errors.name && <span className="field-err">at least 2 characters</span>}
                 </div>
                 <div className={`field ${errors.phone ? 'err' : ''}`}>
                   <label htmlFor="ph">Phone</label>
@@ -161,6 +160,7 @@ export default function Home() {
                     autoComplete="tel" value={form.phone}
                     onChange={handleChange('phone')}
                   />
+                  {errors.phone && <span className="field-err">valid phone required</span>}
                 </div>
               </div>
 
@@ -171,6 +171,7 @@ export default function Home() {
                   autoComplete="email" value={form.email}
                   onChange={handleChange('email')}
                 />
+                {errors.email && <span className="field-err">valid email required</span>}
               </div>
 
               <div className={`field ${errors.message ? 'err' : ''}`}>
@@ -179,6 +180,7 @@ export default function Home() {
                   id="msg" placeholder="tell us what drew you here..."
                   value={form.message} onChange={handleChange('message')}
                 />
+                {errors.message && <span className="field-err">at least 10 characters</span>}
               </div>
 
               <div className="sep" />
